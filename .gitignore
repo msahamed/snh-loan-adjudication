@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+data/*.jsonl
+models/
+LLM Coding Challenge for AI_ML Tech Lead1.pdf
+SNH.AI - AI-ML Engineer - Job Specification.pdf

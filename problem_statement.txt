@@ -1,0 +1,36 @@
+Technical Coding Challenge: AI Loan Adjudication.
+Role: AI/ML Technology Lead
+
+Objective: Design, implement, and evaluate a process for loan adjudication application.
+
+Challenge Details:
+----------------------
+1. Dataset:
+○ A sample dataset of credit loan rules is provided in a JSON format. Each entry
+contains a rule that must be satisfied and followed.
+2. Tasks:
+○ Data Preparation:
+■ Write a Python script to:
+■ Load the provided JSON dataset.
+■ Preprocess the dialogues into a suitable format for LLM training. This
+may involve:
+■ Tokenization. (Special token addition, Padding or truncation)
+■ Split the data into training and validation sets.
+■ Discuss your rationale for the chosen preprocessing steps.
+○ Model Selection and Training:
+■ Free to choose any ML-Model for the task.
+■ You can also use a pre-trained LLM from Hugging Face Transformers as a
+base model.
+○ Evaluation and Analysis:
+■ Evaluate your model's performance on the validation set.
+■ Generate sample applications using your model and analyze the model's
+strengths and weaknesses.
+■ The output should be adjudication decision, explaining the user rationale
+behind the decision.
+
+3. Deliverables:
+○ A GitHub repository containing:
+■ Python scripts for data preparation, model training, and evaluation.
+■ A README file with detailed instructions.
+■ (Optional) A brief report (1-2 pages) summarizing the approach, results,
+and analysis.
