@@ -9,6 +9,12 @@ Current status: trained Qwen3-1.7B QLoRA adapter, deterministic verification lay
 - [Qwen3-1.7B LoRA adapter](https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora)
 - [Synthetic training and evaluation datasets](https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic)
 
+## Evaluation
+
+- [Model and deterministic metrics](docs/evaluation-metrics.md)
+- [Nine representative model and deterministic outputs](docs/representative-outputs.md)
+- Machine-readable results: [`evaluation/metrics.json`](evaluation/metrics.json) and [`evaluation/representative-outputs.json`](evaluation/representative-outputs.json)
+
 ## Data-generation preview
 
 Run `python scripts/generate_data.py --dry-run` to inspect planned field, rule, scenario, and decision coverage without loading a model.
