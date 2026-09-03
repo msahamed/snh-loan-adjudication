@@ -270,6 +270,26 @@ def coverage_report(cases: list[Case], rules: list[dict[str, Any]]) -> dict[str,
     }
 
 
+def representative_sample(cases: list[Case], limit: int) -> list[Case]:
+    preferred = [
+        ("complete", "approve"),
+        ("complete", "review"),
+        ("complete", "reject"),
+        ("missing", "one_missing:age"),
+        ("missing", "several_missing"),
+        ("missing", "all_missing"),
+        ("numeric_boundary", "credit_score:just_below"),
+        ("categorical", "employment_status:informal_alias"),
+        ("dialogue_behavior", "correction"),
+        ("multiple_failures", "reject_and_review"),
+    ]
+    by_scenario = {(case.scenario_group, case.scenario): case for case in cases}
+    selected = [by_scenario[key] for key in preferred if key in by_scenario]
+    selected_ids = {case.case_id for case in selected}
+    selected.extend(case for case in cases if case.case_id not in selected_ids)
+    return selected[:limit]
+
+
 def teacher_messages(case: Case) -> list[dict[str, str]]:
     return [
         {
@@ -278,6 +298,7 @@ def teacher_messages(case: Case) -> list[dict[str, str]]:
                 "Create a realistic loan-intake dialogue from the canonical profile. "
                 "Return only a JSON array of objects with role and content keys. "
                 "Use only assistant and user roles. Preserve supplied values exactly. "
+                "Every content value must be a non-empty string. "
                 "Never add a decision, policy explanation, name, address, or account number."
             ),
         },
@@ -341,6 +362,20 @@ def render_dialogues(
     model.eval()
     torch.manual_seed(42)
 
+    def generate_texts(prompts: list[str]) -> list[str]:
+        inputs = tokenizer(prompts, return_tensors="pt", padding=True).to(model.device)
+        with torch.inference_mode():
+            output_ids = model.generate(
+                **inputs,
+                do_sample=True,
+                temperature=0.8,
+                top_p=0.9,
+                max_new_tokens=900,
+                pad_token_id=tokenizer.pad_token_id,
+            )
+        generated = output_ids[:, inputs["input_ids"].shape[1] :]
+        return tokenizer.batch_decode(generated, skip_special_tokens=True)
+
     rendered: list[list[dict[str, str]]] = []
     for offset in range(0, len(cases), batch_size):
         batch = cases[offset : offset + batch_size]
@@ -353,19 +388,16 @@ def render_dialogues(
             )
             for case in batch
         ]
-        inputs = tokenizer(prompts, return_tensors="pt", padding=True).to(model.device)
-        with torch.inference_mode():
-            output_ids = model.generate(
-                **inputs,
-                do_sample=True,
-                temperature=0.8,
-                top_p=0.9,
-                max_new_tokens=900,
-                pad_token_id=tokenizer.pad_token_id,
-            )
-        generated = output_ids[:, inputs["input_ids"].shape[1] :]
-        texts = tokenizer.batch_decode(generated, skip_special_tokens=True)
-        rendered.extend(parse_dialogue(text) for text in texts)
+        texts = generate_texts(prompts)
+        for prompt, text in zip(prompts, texts, strict=True):
+            for attempt in range(3):
+                try:
+                    rendered.append(parse_dialogue(text))
+                    break
+                except (ValueError, json.JSONDecodeError):
+                    if attempt == 2:
+                        raise
+                    text = generate_texts([prompt])[0]
     return rendered
 
 
@@ -405,6 +437,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=Path("data/sample.jsonl"))
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--batch-size", type=int, default=8)
+    parser.add_argument("--limit", type=int)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -413,6 +446,10 @@ def main() -> None:
     args = parse_args()
     version, rules = load_rules(args.rules)
     cases = build_cases(rules)
+    if args.limit is not None:
+        if args.limit < 1:
+            raise ValueError("--limit must be at least 1")
+        cases = representative_sample(cases, args.limit)
     print(json.dumps(coverage_report(cases, rules), indent=2))
     if args.dry_run:
         return

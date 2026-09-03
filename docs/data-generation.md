@@ -1,19 +1,21 @@
 # Synthetic Data Generation
 
-The rules engine creates canonical application values, decisions, failed rule IDs, and explanations. Qwen3-14B only converts each canonical profile into a multi-turn dialogue.
+The rules engine creates canonical application values, decisions, failed rule IDs, and explanations. It copies the supplied rules into every record; an LLM never creates or modifies policy or labels.
 
-This keeps the labels reproducible and prevents the teacher model from deciding credit outcomes.
+An initial Qwen3-14B experiment generated dialogue paraphrases. Structural validation passed, but manual semantic review found field mismatches. Those candidates were rejected. The final builder uses reviewed, field-specific utterance templates with randomized values, turn order, wording, corrections, missing information, irrelevant text, and typos.
 
-## Preview coverage
+This approach is fast, reproducible, and prevents teacher-model errors from contaminating training labels.
+
+## Build
 
 Run:
 
-    python scripts/generate_data.py --dry-run
+    python scripts/build_dataset.py --output-dir data
 
-## Generate the first sample
+The default split is:
 
-After approval, run:
+- 4,000 training records
+- 500 validation records
+- 500 test records
 
-    python scripts/generate_data.py --model /workspace/models/Qwen3-14B --output data/sample.jsonl
-
-The first generation plan covers all ten fields and all ten rule IDs. It includes complete applications, missing values, numerical boundaries, categorical variations, dialogue variations, and multiple failures.
+Canonical profiles are unique across all splits. Each split covers all ten rule-failure paths and contains approve, review, reject, and collecting-information outcomes.

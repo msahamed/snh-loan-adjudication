@@ -1,0 +1,66 @@
+{
+  "train": {
+    "records": 4000,
+    "decisions": {
+      "REJECT": 1400,
+      "APPROVE": 1000,
+      "COLLECTING_INFORMATION": 800,
+      "REVIEW": 800
+    },
+    "failed_rule_coverage": [
+      "RULE-AGE-001",
+      "RULE-BANKACCTS-001",
+      "RULE-BANKRUPTCY-001",
+      "RULE-CREDIT-001",
+      "RULE-DTI-001",
+      "RULE-EMPLOY-001",
+      "RULE-EMPLOY-002",
+      "RULE-INCOME-001",
+      "RULE-LOANAMT-001",
+      "RULE-RESIDENCY-001"
+    ]
+  },
+  "validation": {
+    "records": 500,
+    "decisions": {
+      "REJECT": 175,
+      "APPROVE": 125,
+      "COLLECTING_INFORMATION": 100,
+      "REVIEW": 100
+    },
+    "failed_rule_coverage": [
+      "RULE-AGE-001",
+      "RULE-BANKACCTS-001",
+      "RULE-BANKRUPTCY-001",
+      "RULE-CREDIT-001",
+      "RULE-DTI-001",
+      "RULE-EMPLOY-001",
+      "RULE-EMPLOY-002",
+      "RULE-INCOME-001",
+      "RULE-LOANAMT-001",
+      "RULE-RESIDENCY-001"
+    ]
+  },
+  "test": {
+    "records": 500,
+    "decisions": {
+      "COLLECTING_INFORMATION": 100,
+      "APPROVE": 125,
+      "REVIEW": 100,
+      "REJECT": 175
+    },
+    "failed_rule_coverage": [
+      "RULE-AGE-001",
+      "RULE-BANKACCTS-001",
+      "RULE-BANKRUPTCY-001",
+      "RULE-CREDIT-001",
+      "RULE-DTI-001",
+      "RULE-EMPLOY-001",
+      "RULE-EMPLOY-002",
+      "RULE-INCOME-001",
+      "RULE-LOANAMT-001",
+      "RULE-RESIDENCY-001"
+    ]
+  },
+  "unique_profiles": 5000
+}
