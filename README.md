@@ -11,6 +11,7 @@ Current status: trained Qwen3-1.7B QLoRA adapter, deterministic verification lay
 
 ## Evaluation
 
+- [Final two-page report](docs/final-report.md)
 - [Model and deterministic metrics](docs/evaluation-metrics.md)
 - [Nine representative model and deterministic outputs](docs/representative-outputs.md)
 - Machine-readable results: [`evaluation/metrics.json`](evaluation/metrics.json) and [`evaluation/representative-outputs.json`](evaluation/representative-outputs.json)
