@@ -28,16 +28,16 @@ def parse_json_object(text: str) -> dict[str, Any]:
 
 def safe_engine_decision(
     prediction: dict[str, Any], rules: list[dict[str, Any]]
-) -> tuple[str, list[str]] | None:
+) -> tuple[str, list[str], str] | None:
     if not all(field in prediction for field in FIELDS):
         return None
     try:
-        decision, failed_ids, _ = adjudicate(
+        decision, failed_ids, explanation = adjudicate(
             {field: prediction[field] for field in FIELDS}, rules
         )
     except (KeyError, TypeError, ValueError):
         return None
-    return decision, failed_ids
+    return decision, failed_ids, explanation
 
 
 def metric_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
@@ -63,6 +63,14 @@ def metric_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             sum(item["all_fields_exact"] for item in results), total
         ),
         "null_status_accuracy": ratio(null_correct, field_total),
+        "missing_field_hallucination_rate": ratio(
+            sum(item["unsupported_value_count"] for item in results),
+            sum(item["expected_null_count"] for item in results),
+        ),
+        "present_field_omission_rate": ratio(
+            sum(item["omitted_value_count"] for item in results),
+            sum(item["expected_present_count"] for item in results),
+        ),
         "decision_accuracy": ratio(
             sum(item["decision_correct"] for item in results), total
         ),
@@ -73,6 +81,15 @@ def metric_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "failed_rule_recall": ratio(tp, tp + fn),
         "engine_decision_accuracy": ratio(
             sum(item["engine_decision_correct"] for item in results), total
+        ),
+        "engine_failed_rule_exact_match": ratio(
+            sum(item["engine_failed_rules_exact"] for item in results), total
+        ),
+        "model_engine_decision_agreement": ratio(
+            sum(item["model_engine_decision_agree"] for item in results), total
+        ),
+        "model_engine_citation_exact_match": ratio(
+            sum(item["model_engine_citations_exact"] for item in results), total
         ),
     }
 
@@ -98,6 +115,13 @@ def score_prediction(
         "failed_rule_fp": 0,
         "failed_rule_fn": len(expected["failed_rule_ids"]),
         "engine_decision_correct": False,
+        "engine_failed_rules_exact": False,
+        "model_engine_decision_agree": False,
+        "model_engine_citations_exact": False,
+        "expected_null_count": sum(expected[field] is None for field in FIELDS),
+        "expected_present_count": sum(expected[field] is not None for field in FIELDS),
+        "unsupported_value_count": 0,
+        "omitted_value_count": sum(expected[field] is not None for field in FIELDS),
     }
     try:
         prediction = parse_json_object(generated_text)
@@ -116,6 +140,12 @@ def score_prediction(
         (prediction.get(field) is None) == (expected[field] is None) for field in FIELDS
     )
     base["all_fields_exact"] = all(field_matches)
+    base["unsupported_value_count"] = sum(
+        expected[field] is None and prediction.get(field) is not None for field in FIELDS
+    )
+    base["omitted_value_count"] = sum(
+        expected[field] is not None and prediction.get(field) is None for field in FIELDS
+    )
     base["decision_correct"] = prediction.get("decision") == expected["decision"]
 
     predicted_ids = prediction.get("failed_rule_ids", [])
@@ -130,7 +160,13 @@ def score_prediction(
     engine_result = safe_engine_decision(prediction, record["input"]["rules"])
     if engine_result is not None:
         base["engine_decision"] = engine_result[0]
+        base["engine_failed_rule_ids"] = engine_result[1]
+        base["engine_explanation"] = engine_result[2]
         base["engine_decision_correct"] = engine_result[0] == expected["decision"]
+        engine_set = set(engine_result[1])
+        base["engine_failed_rules_exact"] = engine_set == expected_set
+        base["model_engine_decision_agree"] = prediction.get("decision") == engine_result[0]
+        base["model_engine_citations_exact"] = predicted_set == engine_set
     return base
 
 

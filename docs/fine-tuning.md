@@ -39,3 +39,20 @@ Qwen3-1.7B was evaluated without fine-tuning on 100 validation records:
 - Deterministic-engine decision accuracy from predicted fields: 91%
 
 The model usually extracts the application correctly but does not reliably apply the supplied rules. This is the behavior the LoRA experiment should target, while the deterministic engine remains the final authority.
+
+## QLoRA training
+
+Install the single additional training dependency and run a one-step smoke test:
+
+    pip install -r training-requirements.txt
+
+    python scripts/train_qlora.py \
+      --model /workspace/models/Qwen3-1.7B \
+      --max-train-samples 8 \
+      --max-validation-samples 4 \
+      --max-steps 1 \
+      --eval-steps 1 \
+      --save-steps 1 \
+      --output-dir artifacts/smoke-test
+
+After the smoke test passes, remove the sample and step limits for the full two-epoch run. The script uses NF4 double quantization, rank 16, alpha 32, dropout 0.05, dynamic padding, gradient checkpointing, and response-only loss.

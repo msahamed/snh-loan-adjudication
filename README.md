@@ -17,3 +17,7 @@ Run:
     python scripts/build_dataset.py --output-dir data
 
 This creates 4,000 training, 500 validation, and 500 test records. Generated JSONL files are intentionally excluded from Git.
+
+## Fine-tuning
+
+See [the fine-tuning guide](docs/fine-tuning.md) for preprocessing, baseline evaluation, and QLoRA training commands.
