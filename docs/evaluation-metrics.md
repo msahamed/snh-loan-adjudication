@@ -6,6 +6,7 @@ All metrics use generation-mode predictions from the final Qwen3-1.7B LoRA adapt
 
 | Dataset | Model accuracy | Model macro F1 | Model citation exact | Engine accuracy | Engine macro F1 | Engine citation exact |
 |---|---:|---:|---:|---:|---:|---:|
+| Validation | 99.40% | 99.32% | 97.20% | 99.40% | 99.32% | 100.00% |
 | Test-1 | 99.40% | 99.44% | 95.80% | 100.00% | 100.00% | 100.00% |
 | Test-2 | 87.80% | 87.29% | 91.80% | 88.80% | 88.80% | 95.60% |
 | Test-3 | 78.60% | 75.06% | 53.00% | 91.60% | 94.62% | 75.40% |
@@ -14,12 +15,70 @@ All metrics use generation-mode predictions from the final Qwen3-1.7B LoRA adapt
 
 | Dataset | Layer | False approvals of rejects | Incomplete cases adjudicated | Review cases approved | Decision overrides | Citation overrides |
 |---|---|---:|---:|---:|---:|---:|
+| Validation | Model | 0 | 3 | 0 |  |  |
+| Validation | Engine | 0 | 3 | 0 | 0 | 14 |
 | Test-1 | Model | 2 | 0 | 1 |  |  |
 | Test-1 | Engine | 0 | 0 | 0 | 3 | 21 |
 | Test-2 | Model | 1 | 55 | 1 |  |  |
 | Test-2 | Engine | 1 | 55 | 0 | 9 | 24 |
 | Test-3 | Model | 19 | 1 | 9 |  |  |
 | Test-3 | Engine | 0 | 1 | 7 | 128 | 200 |
+
+## Validation
+
+Extraction: 99.92% field accuracy; 99.20% all-fields exact; 1.57% missing-field hallucination.
+
+### Model: per-label metrics
+
+| Label | Precision | Recall | F1 | Support |
+|---|---:|---:|---:|---:|
+| APPROVE | 97.66% | 100.00% | 98.82% | 125 |
+| REVIEW | 100.00% | 100.00% | 100.00% | 100 |
+| REJECT | 100.00% | 100.00% | 100.00% | 175 |
+| COLLECTING_INFORMATION | 100.00% | 97.00% | 98.48% | 100 |
+
+### Model: confusion matrix
+
+Rows are expected labels; columns are predicted labels.
+
+| Expected \ Predicted | APPROVE | REVIEW | REJECT | COLLECTING_INFORMATION | INVALID |
+|---|---:|---:|---:|---:|---:|
+| APPROVE | 125 | 0 | 0 | 0 | 0 |
+| REVIEW | 0 | 100 | 0 | 0 | 0 |
+| REJECT | 0 | 0 | 175 | 0 | 0 |
+| COLLECTING_INFORMATION | 3 | 0 | 0 | 97 | 0 |
+
+Citation precision/recall/exact: 100.00% / 96.89% / 97.20%.
+
+Unsupported rule-ID rate: 0.00%.
+
+Explanation exact match: 95.60%. Exact match is intentionally strict and does not score acceptable paraphrases.
+
+### Deterministic engine: per-label metrics
+
+| Label | Precision | Recall | F1 | Support |
+|---|---:|---:|---:|---:|
+| APPROVE | 97.66% | 100.00% | 98.82% | 125 |
+| REVIEW | 100.00% | 100.00% | 100.00% | 100 |
+| REJECT | 100.00% | 100.00% | 100.00% | 175 |
+| COLLECTING_INFORMATION | 100.00% | 97.00% | 98.48% | 100 |
+
+### Deterministic engine: confusion matrix
+
+Rows are expected labels; columns are predicted labels.
+
+| Expected \ Predicted | APPROVE | REVIEW | REJECT | COLLECTING_INFORMATION | INVALID |
+|---|---:|---:|---:|---:|---:|
+| APPROVE | 125 | 0 | 0 | 0 | 0 |
+| REVIEW | 0 | 100 | 0 | 0 | 0 |
+| REJECT | 0 | 0 | 175 | 0 | 0 |
+| COLLECTING_INFORMATION | 3 | 0 | 0 | 97 | 0 |
+
+Citation precision/recall/exact: 100.00% / 100.00% / 100.00%.
+
+Unsupported rule-ID rate: 0.00%.
+
+Explanation exact match: 89.60%. Exact match is intentionally strict and does not score acceptable paraphrases.
 
 ## Test-1
 
@@ -191,4 +250,4 @@ Explanation exact match: 74.20%. Exact match is intentionally strict and does no
 
 ## Interpretation
 
-Test-1 shows strong in-distribution performance. Test-2 exposes unresolved-evidence failures. Test-3 shows that the model is not fully rule-agnostic. The deterministic layer corrects many decisions and citations, but it cannot recover applicant values that the model omitted or hallucinated.
+Validation and Test-1 show strong in-distribution performance. Three validation cases with missing information were incorrectly completed by the model, so both layers approved them. Test-2 exposes more unresolved-evidence failures. Test-3 shows that the model is not fully rule-agnostic. The deterministic layer corrects many decisions and citations, but it cannot recover applicant values that the model omitted or hallucinated.

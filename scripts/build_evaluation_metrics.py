@@ -310,7 +310,7 @@ def markdown_report(metrics: dict[str, Any]) -> str:
         "",
         "## Interpretation",
         "",
-        "Test-1 shows strong in-distribution performance. Test-2 exposes unresolved-evidence failures. Test-3 shows that the model is not fully rule-agnostic. The deterministic layer corrects many decisions and citations, but it cannot recover applicant values that the model omitted or hallucinated.",
+        "Validation and Test-1 show strong in-distribution performance. Three validation cases with missing information were incorrectly completed by the model, so both layers approved them. Test-2 exposes more unresolved-evidence failures. Test-3 shows that the model is not fully rule-agnostic. The deterministic layer corrects many decisions and citations, but it cannot recover applicant values that the model omitted or hallucinated.",
         "",
     ])
     return "\n".join(lines)
@@ -323,6 +323,10 @@ def main() -> None:
     args = parser.parse_args()
 
     inputs = {
+        "Validation": (
+            Path("reports/fine-tuned-validation/predictions.jsonl"),
+            Path("data/validation.jsonl"),
+        ),
         "Test-1": (Path("reports/fine-tuned-test/predictions.jsonl"), Path("data/test.jsonl")),
         "Test-2": (Path("reports/adversarial-test-2/predictions.jsonl"), Path("data/test-2.jsonl")),
         "Test-3": (Path("reports/changed-rules-test-3/predictions.jsonl"), Path("data/test-3.jsonl")),

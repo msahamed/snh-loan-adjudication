@@ -1,4 +1,173 @@
 {
+  "Validation": {
+    "records": 500,
+    "extraction": {
+      "json_valid_rate": 1.0,
+      "schema_valid_rate": 1.0,
+      "field_exact_accuracy": 0.9992,
+      "all_fields_exact_rate": 0.992,
+      "missing_field_hallucination_rate": 0.0157,
+      "present_field_omission_rate": 0.0
+    },
+    "model": {
+      "classification": {
+        "accuracy": 0.994,
+        "macro_f1": 0.9932,
+        "per_label": {
+          "APPROVE": {
+            "precision": 0.9766,
+            "recall": 1.0,
+            "f1": 0.9882,
+            "support": 125
+          },
+          "REVIEW": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 100
+          },
+          "REJECT": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 175
+          },
+          "COLLECTING_INFORMATION": {
+            "precision": 1.0,
+            "recall": 0.97,
+            "f1": 0.9848,
+            "support": 100
+          }
+        },
+        "confusion_matrix": {
+          "APPROVE": {
+            "APPROVE": 125,
+            "REVIEW": 0,
+            "REJECT": 0,
+            "COLLECTING_INFORMATION": 0,
+            "INVALID": 0
+          },
+          "REVIEW": {
+            "APPROVE": 0,
+            "REVIEW": 100,
+            "REJECT": 0,
+            "COLLECTING_INFORMATION": 0,
+            "INVALID": 0
+          },
+          "REJECT": {
+            "APPROVE": 0,
+            "REVIEW": 0,
+            "REJECT": 175,
+            "COLLECTING_INFORMATION": 0,
+            "INVALID": 0
+          },
+          "COLLECTING_INFORMATION": {
+            "APPROVE": 3,
+            "REVIEW": 0,
+            "REJECT": 0,
+            "COLLECTING_INFORMATION": 97,
+            "INVALID": 0
+          }
+        },
+        "critical_false_approvals": 0,
+        "critical_false_approval_rate": 0.0,
+        "incomplete_cases_adjudicated": 3,
+        "incomplete_case_error_rate": 0.03,
+        "review_cases_false_approved": 0
+      },
+      "citations": {
+        "exact_match": 0.972,
+        "precision": 1.0,
+        "recall": 0.9689,
+        "unsupported_rule_id_rate": 0.0,
+        "records_with_unsupported_rule_ids_rate": 0.0
+      },
+      "explanations": {
+        "nonempty_rate": 1.0,
+        "exact_match": 0.956
+      }
+    },
+    "deterministic": {
+      "classification": {
+        "accuracy": 0.994,
+        "macro_f1": 0.9932,
+        "per_label": {
+          "APPROVE": {
+            "precision": 0.9766,
+            "recall": 1.0,
+            "f1": 0.9882,
+            "support": 125
+          },
+          "REVIEW": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 100
+          },
+          "REJECT": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 175
+          },
+          "COLLECTING_INFORMATION": {
+            "precision": 1.0,
+            "recall": 0.97,
+            "f1": 0.9848,
+            "support": 100
+          }
+        },
+        "confusion_matrix": {
+          "APPROVE": {
+            "APPROVE": 125,
+            "REVIEW": 0,
+            "REJECT": 0,
+            "COLLECTING_INFORMATION": 0,
+            "INVALID": 0
+          },
+          "REVIEW": {
+            "APPROVE": 0,
+            "REVIEW": 100,
+            "REJECT": 0,
+            "COLLECTING_INFORMATION": 0,
+            "INVALID": 0
+          },
+          "REJECT": {
+            "APPROVE": 0,
+            "REVIEW": 0,
+            "REJECT": 175,
+            "COLLECTING_INFORMATION": 0,
+            "INVALID": 0
+          },
+          "COLLECTING_INFORMATION": {
+            "APPROVE": 3,
+            "REVIEW": 0,
+            "REJECT": 0,
+            "COLLECTING_INFORMATION": 97,
+            "INVALID": 0
+          }
+        },
+        "critical_false_approvals": 0,
+        "critical_false_approval_rate": 0.0,
+        "incomplete_cases_adjudicated": 3,
+        "incomplete_case_error_rate": 0.03,
+        "review_cases_false_approved": 0
+      },
+      "citations": {
+        "exact_match": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "unsupported_rule_id_rate": 0.0,
+        "records_with_unsupported_rule_ids_rate": 0.0
+      },
+      "explanations": {
+        "nonempty_rate": 1.0,
+        "exact_match": 0.896
+      },
+      "decision_override_count": 0,
+      "citation_override_count": 14
+    }
+  },
   "Test-1": {
     "records": 500,
     "extraction": {

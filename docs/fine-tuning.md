@@ -59,6 +59,18 @@ After the smoke test passes, remove the sample and step limits for the full two-
 
 ## Fine-tuned evaluation
 
+The final adapter was first evaluated in generation mode on all 500 validation records:
+
+- 100% valid JSON and schema
+- 99.92% field accuracy
+- 99.4% shadow-decision accuracy
+- 97.2% model failed-rule exact match
+- 99.4% deterministic decision accuracy
+- 100% deterministic failed-rule exact match
+- 0 unsupported rule IDs
+
+The three decision errors were incomplete applications where the model supplied a plausible value for missing information. Because the rules engine receives extracted fields rather than raw dialogue evidence, it repeated those approvals. This is the main validation limitation and supports adding an evidence-grounding gate before adjudication.
+
 The final adapter completed 250 training steps. On the untouched 500-record test split it achieved 99.4% shadow-decision accuracy and 95.8% failed-rule exact match. Recomputing from extracted fields produced 100% deterministic decision and citation accuracy.
 
 The separate 500-record adversarial `test-2` set is intentionally harder. It contains contradictions, ambiguous and missing answers, prompt injection, misleading rule claims, third-party values, premature decisions, and irrelevant sensitive disclosures. Results were:
