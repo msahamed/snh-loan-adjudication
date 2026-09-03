@@ -1,0 +1,41 @@
+# Fine-Tuning
+
+The first experiment uses Qwen3-1.7B with one QLoRA adapter. The model receives the active rules and dialogue, then produces the flat JSON contract documented in the system design. The deterministic engine remains authoritative.
+
+## Preprocessing
+
+Run:
+
+    python scripts/prepare_training_data.py \
+      --model /workspace/models/Qwen3-1.7B \
+      --input-dir data \
+      --output-dir data/processed
+
+The script validates every record and applies the model's native chat template. The measured maximum is 1,539 tokens, so training will use a 2,048-token limit. Training should use dynamic batch padding and compute loss only on assistant-response tokens; pre-padding every record would waste memory.
+
+## Baseline
+
+Before training, evaluate the untouched model:
+
+    python scripts/evaluate_baseline.py \
+      --model /workspace/models/Qwen3-1.7B \
+      --data data/validation.jsonl \
+      --limit 100
+
+The report includes JSON validity, exact field accuracy, missing-value accuracy, decision accuracy, failed-rule precision/recall, and the authoritative engine's decision accuracy when consuming the predicted fields.
+
+The test split remains untouched until the adapter and hyperparameters are selected using validation results.
+
+## Measured baseline
+
+Qwen3-1.7B was evaluated without fine-tuning on 100 validation records:
+
+- JSON validity: 100%
+- Schema validity: 100%
+- Exact field accuracy: 96.9%
+- All fields exact per record: 77%
+- Shadow decision accuracy: 42%
+- Failed-rule exact match: 0%
+- Deterministic-engine decision accuracy from predicted fields: 91%
+
+The model usually extracts the application correctly but does not reliably apply the supplied rules. This is the behavior the LoRA experiment should target, while the deterministic engine remains the final authority.

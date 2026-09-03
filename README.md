@@ -8,7 +8,7 @@ Current status: system design and a validated 5,000-record synthetic dataset.
 
 Run `python scripts/generate_data.py --dry-run` to inspect planned field, rule, scenario, and decision coverage without loading a model.
 
-See [the system design](docs/system-design.md) and [data-generation notes](docs/data-generation.md).
+See [the system design](docs/system-design.md), [data-generation notes](docs/data-generation.md), and [fine-tuning plan](docs/fine-tuning.md).
 
 ## Build the dataset
 
