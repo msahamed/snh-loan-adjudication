@@ -32,60 +32,63 @@ OUTCOME_RATIOS = {
     "COLLECTING_INFORMATION": 0.20,
 }
 
-FIELD_LABELS = {
-    "age": "current age",
-    "credit_score": "current credit score",
-    "annual_income_usd": "verified gross annual income",
-    "debt_to_income_ratio_percent": "debt-to-income ratio percentage",
-    "employment_status": "current employment status",
-    "current_employment_duration_months": "current employment duration",
-    "residency_status": "current U.S. residency status",
-    "has_bankruptcy_recent": "bankruptcy-filing status for the past seven years",
-    "requested_amount_usd": "requested loan amount",
-    "has_verifiable_bank_account": "active bank-account verification status",
-}
-
-
 def curated_banks() -> dict[str, dict[str, list[str]]]:
-    question_patterns = [
-        "What is your {label}?",
-        "Could you provide your {label}?",
-        "Please tell me your {label}.",
-        "Could you confirm your {label}?",
-        "What should I record as your {label}?",
-        "May I ask for your {label}?",
-        "For the application, what is your {label}?",
-        "Please share your {label}.",
-    ]
-    answer_patterns = [
-        "My {label} is <VALUE>.",
-        "For this application, my {label} is <VALUE>.",
-        "I can confirm that my {label} is <VALUE>.",
-        "The correct {label} is <VALUE>.",
-        "Please record my {label} as <VALUE>.",
-        "Regarding my {label}, it is <VALUE>.",
-        "My answer for {label} is <VALUE>.",
-        "The {label} I am reporting is <VALUE>.",
-    ]
-    return {
-        field: {
-            "questions": [pattern.format(label=label) for pattern in question_patterns],
-            "answers": [pattern.format(label=label) for pattern in answer_patterns],
-        }
-        for field, label in FIELD_LABELS.items()
+    base = {
+        "age": {
+            "questions": ["How old are you?", "What's your age?", "Can I get your age?", "Could you confirm your age?"],
+            "answers": ["I'm <VALUE>.", "I'm currently <VALUE>.", "My age is <VALUE>.", "Sure, I'm <VALUE>."],
+        },
+        "credit_score": {
+            "questions": ["What's your current credit score?", "Do you know your credit score?", "Can you share your credit score?", "What credit score should I use?"],
+            "answers": ["My credit score is <VALUE>.", "It's <VALUE>.", "The latest score I have is <VALUE>.", "I believe it's <VALUE>."],
+        },
+        "annual_income_usd": {
+            "questions": ["What's your gross annual income?", "How much do you make per year before taxes?", "What is your yearly income before taxes?", "Can you share your annual income?"],
+            "answers": ["I make <VALUE> a year before taxes.", "My annual income is <VALUE>.", "It's <VALUE> per year.", "I earn about <VALUE> annually."],
+        },
+        "debt_to_income_ratio_percent": {
+            "questions": ["Do you know your debt-to-income ratio?", "What's your current debt-to-income ratio?", "What percentage is your debt-to-income ratio?", "Can you share your DTI percentage?"],
+            "answers": ["My debt-to-income ratio is <VALUE>.", "It's <VALUE>.", "My DTI is <VALUE>.", "The current percentage is <VALUE>."],
+        },
+        "employment_status": {
+            "questions": ["What's your current employment status?", "Are you currently working?", "How are you currently employed?", "Can you describe your employment status?"],
+            "answers": ["I'm currently <VALUE>.", "I'm <VALUE>.", "My current status is <VALUE>.", "At the moment, I'm <VALUE>."],
+        },
+        "current_employment_duration_months": {
+            "questions": ["How long have you been in your current role?", "How many months have you been with your current employer?", "How long have you been doing your current work?", "When did you start your current job?"],
+            "answers": ["I've been there for <VALUE>.", "I've been in this role for <VALUE>.", "It's been <VALUE>.", "I've done this work for <VALUE>."],
+        },
+        "residency_status": {
+            "questions": ["Are you a U.S. citizen or permanent resident?", "What's your U.S. residency status?", "Can you confirm your residency status?", "How would you describe your current U.S. residency status?"],
+            "answers": ["I'm <VALUE>.", "My status is <VALUE>.", "I'm currently <VALUE>.", "For residency purposes, I'm <VALUE>."],
+        },
+        "has_bankruptcy_recent": {
+            "questions": ["Have you filed for bankruptcy in the past seven years?", "Any bankruptcy filings within the last seven years?", "Have you had a recent bankruptcy?", "Has there been a bankruptcy filing in the past seven years?"],
+            "answers": ["I've had <VALUE>.", "There has been <VALUE>.", "My record shows <VALUE>.", "I can confirm <VALUE>."],
+        },
+        "requested_amount_usd": {
+            "questions": ["How much would you like to borrow?", "What loan amount are you requesting?", "How much are you applying for?", "What amount do you need?"],
+            "answers": ["I'd like to borrow <VALUE>.", "I'm applying for <VALUE>.", "The amount I need is <VALUE>.", "I'm requesting <VALUE>."],
+        },
+        "has_verifiable_bank_account": {
+            "questions": ["Do you have an active bank account we can verify?", "Can your bank account be verified?", "Do you have a bank account in your name?", "Is there an active bank account we can use for the loan?"],
+            "answers": ["I have <VALUE>.", "Yes, I can confirm I have <VALUE>.", "At the moment, I have <VALUE>.", "For the loan, I have <VALUE>."],
+        },
     }
+    return base
 
 
 def valid_profile(rng: random.Random) -> dict[str, Any]:
     income = rng.randrange(30_000, 200_001, 500)
+    employment_status = rng.choice(
+        ["employed_full_time", "employed_part_time", "self_employed", "retired"]
+    )
     return {
-        "age": rng.randint(18, 75),
+        "age": rng.randint(55, 80) if employment_status == "retired" else rng.randint(18, 75),
         "credit_score": rng.randint(670, 850),
         "annual_income_usd": income,
         "debt_to_income_ratio_percent": rng.randint(5, 40),
-        "employment_status": rng.choice(
-            ["employed_full_time", "employed_part_time", "self_employed", "retired"]
-        ),
+        "employment_status": employment_status,
         "current_employment_duration_months": rng.randint(6, 240),
         "residency_status": rng.choice(["US_Citizen", "Permanent_Resident"]),
         "has_bankruptcy_recent": False,
@@ -142,6 +145,8 @@ def make_profile(outcome: str, rng: random.Random) -> tuple[dict[str, Any], str]
         }
         for field in failures:
             profile[field] = failing_values[field]()
+        if profile["employment_status"] in {"unemployed", "student"}:
+            profile["current_employment_duration_months"] = 0
         scenario = "failed:" + ",".join(sorted(failures))
     else:
         count = 10 if rng.random() < 0.05 else rng.randint(1, 4)
@@ -184,7 +189,7 @@ def value_phrase(field: str, value: Any) -> str:
     if field == "debt_to_income_ratio_percent":
         return f"{value}%"
     if field == "current_employment_duration_months":
-        return f"{value} months"
+        return "1 month" if value == 1 else f"{value} months"
     if field == "age":
         return f"{value} years old"
     return str(value)
@@ -215,11 +220,41 @@ def render_dialogue(
     if behavior == "correction" and available_numeric:
         correction_field = rng.choice(available_numeric)
 
+    exchanges: list[tuple[str, str]] = []
     for field in order:
         value = profile[field]
         if value is None and rng.random() < 0.35:
             continue
-        dialogue.append({"role": "assistant", "content": rng.choice(banks[field]["questions"])})
+        question_bank = banks[field]["questions"]
+        answer_bank = banks[field]["answers"]
+        if field == "current_employment_duration_months":
+            if profile["employment_status"] == "retired":
+                question_bank = [
+                    "How long have you been retired?",
+                    "How many months have you received retirement income?",
+                    "When did you retire?",
+                    "How long has retirement been your income source?",
+                ]
+                answer_bank = [
+                    "I've been retired for <VALUE>.",
+                    "I've received retirement income for <VALUE>.",
+                    "I retired <VALUE> ago.",
+                    "Retirement has been my income source for <VALUE>.",
+                ]
+            elif profile["employment_status"] in {"unemployed", "student"}:
+                question_bank = [
+                    "How long have you been in your current role?",
+                    "Do you have a current job?",
+                    "How many months have you been employed?",
+                    "When did your current employment begin?",
+                ]
+                answer_bank = [
+                    "I'm not currently employed, so the duration is <VALUE>.",
+                    "I don't have a current job. The duration is <VALUE>.",
+                    "My current employment duration is <VALUE>.",
+                    "I haven't started a current role, so it's <VALUE>.",
+                ]
+        question = rng.choice(question_bank)
         if value is None:
             answer = rng.choice([
                 "I don't know that right now.",
@@ -227,19 +262,40 @@ def render_dialogue(
                 "I'm not sure, so please leave that unanswered.",
             ])
         else:
-            answer = rng.choice(banks[field]["answers"]).replace(
+            answer = rng.choice(answer_bank).replace(
                 "<VALUE>", value_phrase(field, value)
             )
             if field == correction_field:
                 wrong = value + (1000 if field in {"annual_income_usd", "requested_amount_usd"} else 1)
                 answer = (
-                    f"I initially said {value_phrase(field, wrong)}, but that was incorrect. "
-                    f"To correct it, {answer}"
+                    f"I initially said {value_phrase(field, wrong)}, but the correct value is "
+                    f"{value_phrase(field, value)}."
                 )
-        dialogue.append({"role": "user", "content": answer})
+        exchanges.append((question, answer))
+
+    index = 0
+    transitions = ["Also, ", "Next, ", "Just to confirm, ", "Before we continue, "]
+    rng.shuffle(transitions)
+    while index < len(exchanges):
+        group_size = 2 if index + 1 < len(exchanges) and rng.random() < 0.35 else 1
+        group = exchanges[index : index + group_size]
+        questions = " ".join(item[0] for item in group)
+        transition = (
+            transitions.pop()
+            if index > 0 and transitions and rng.random() < 0.4
+            else ""
+        )
+        if transition:
+            questions = transition + questions[0].lower() + questions[1:]
+        answers = " ".join(item[1] for item in group)
+        if rng.random() < 0.2 and not answers.startswith(("Sure", "Yes")):
+            answers = "Sure. " + answers
+        dialogue.append({"role": "assistant", "content": questions})
+        dialogue.append({"role": "user", "content": answers})
+        index += group_size
 
     if behavior == "irrelevant":
-        dialogue.insert(1, {"role": "user", "content": "I hope this does not take too long; I have an appointment later."})
+        dialogue[0]["content"] += " I have an appointment later, so I may need to finish this afterward."
     elif behavior == "typos":
         dialogue[0]["content"] = "I'd like to aplly for a personal laon."
     return dialogue, behavior

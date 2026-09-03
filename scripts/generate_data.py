@@ -14,6 +14,19 @@ from typing import Any
 DEFAULT_MODEL = "Qwen/Qwen3-14B"
 MISSING_DECISION = "COLLECTING_INFORMATION"
 
+FIELD_NAMES = {
+    "age": "age",
+    "credit_score": "credit score",
+    "annual_income_usd": "annual income",
+    "debt_to_income_ratio_percent": "debt-to-income ratio",
+    "employment_status": "employment status",
+    "current_employment_duration_months": "employment duration",
+    "residency_status": "residency status",
+    "has_bankruptcy_recent": "recent bankruptcy history",
+    "requested_amount_usd": "requested loan amount",
+    "has_verifiable_bank_account": "verifiable bank account",
+}
+
 
 @dataclass
 class Case:
@@ -88,10 +101,11 @@ def adjudicate(
         {field_key(rule) for rule in rules if profile.get(field_key(rule)) is None}
     )
     if missing:
+        missing_names = [FIELD_NAMES[field] for field in missing]
         return (
             MISSING_DECISION,
             [],
-            f"More information is required for: {', '.join(missing)}.",
+            f"More information is needed for: {', '.join(missing_names)}.",
         )
 
     failed: list[tuple[dict[str, Any], Any, Any]] = []
@@ -111,15 +125,24 @@ def adjudicate(
         else "APPROVE"
     )
     if not failed:
-        return decision, failed_ids, "The application meets all supplied credit rules."
+        return decision, failed_ids, "Based on the information provided, the application meets the current requirements."
 
-    reasons = [
-        (
-            f"{rule['name']} was not satisfied: reported {actual}, "
-            f"required {rule['operator']} {expected}."
-        )
-        for rule, actual, expected in failed
-    ]
+    def reason(rule: dict[str, Any], actual: Any, expected: Any) -> str:
+        templates = {
+            "RULE-AGE-001": lambda: f"The applicant is {actual}. The minimum age is {expected}.",
+            "RULE-CREDIT-001": lambda: f"The reported credit score is {actual}. The minimum is {expected}.",
+            "RULE-INCOME-001": lambda: f"The reported annual income is ${actual:,.2f}. The minimum is ${expected:,.2f}.",
+            "RULE-DTI-001": lambda: f"The reported debt-to-income ratio is {actual}%. The maximum is {expected}%.",
+            "RULE-EMPLOY-001": lambda: "The reported employment status does not meet the current employment requirement.",
+            "RULE-EMPLOY-002": lambda: f"The reported employment duration is {actual} {'month' if actual == 1 else 'months'}. At least {expected} months is required.",
+            "RULE-RESIDENCY-001": lambda: "The reported residency status does not meet the current residency requirement.",
+            "RULE-BANKRUPTCY-001": lambda: "The applicant reported a bankruptcy filing within the last seven years.",
+            "RULE-LOANAMT-001": lambda: f"The requested amount is ${actual:,.2f}. The maximum for the reported income is ${expected:,.2f}.",
+            "RULE-BANKACCTS-001": lambda: "The applicant does not have an active bank account that can be verified.",
+        }
+        return templates[rule["id"]]()
+
+    reasons = [reason(rule, actual, expected) for rule, actual, expected in failed]
     return decision, failed_ids, " ".join(reasons)
 
 

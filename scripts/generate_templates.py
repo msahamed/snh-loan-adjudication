@@ -21,8 +21,21 @@ FIELDS = {
     "has_verifiable_bank_account": "whether an active verifiable bank account exists",
 }
 
+QUESTION_TERMS = {
+    "age": ("age", "old"),
+    "credit_score": ("credit score", "fico"),
+    "annual_income_usd": ("annual income", "yearly income", "make per year", "earn per year"),
+    "debt_to_income_ratio_percent": ("debt-to-income", "dti"),
+    "employment_status": ("employment status", "currently working", "currently employed"),
+    "current_employment_duration_months": ("how long", "how many months", "when did you start"),
+    "residency_status": ("residency", "citizen or permanent resident", "immigration status"),
+    "has_bankruptcy_recent": ("bankrupt"),
+    "requested_amount_usd": ("amount", "how much"),
+    "has_verifiable_bank_account": ("bank account"),
+}
 
-def parse_bank(text: str) -> dict[str, list[str]]:
+
+def parse_bank(text: str, field: str) -> dict[str, list[str]]:
     start, end = text.find("{"), text.rfind("}")
     if start < 0 or end < start:
         raise ValueError("Response did not contain a JSON object")
@@ -30,18 +43,28 @@ def parse_bank(text: str) -> dict[str, list[str]]:
     if set(bank) != {"questions", "answers"}:
         raise ValueError("Unexpected template-bank keys")
     for key in ("questions", "answers"):
-        if not isinstance(bank[key], list) or len(bank[key]) < 8:
-            raise ValueError(f"Expected at least eight {key}")
+        if not isinstance(bank[key], list) or len(bank[key]) < 20:
+            raise ValueError(f"Expected at least 20 {key}")
         if not all(isinstance(item, str) and item.strip() for item in bank[key]):
             raise ValueError(f"Invalid {key}")
     if any("<VALUE>" in item for item in bank["questions"]):
         raise ValueError("Questions must not contain <VALUE>")
     if any(item.count("<VALUE>") != 1 for item in bank["answers"]):
         raise ValueError("Every answer must contain <VALUE> exactly once")
+    terms = QUESTION_TERMS[field]
+    if isinstance(terms, str):
+        terms = (terms,)
+    valid_questions = [
+        item
+        for item in bank["questions"]
+        if any(term in item.lower() for term in terms)
+    ]
+    if len(valid_questions) < 20:
+        raise ValueError(f"Too many questions drifted away from {field}")
     forbidden = ("approve", "reject", "eligible", "decision")
     if any(word in item.lower() for values in bank.values() for item in values for word in forbidden):
         raise ValueError("Template contains adjudication language")
-    return {key: values[:8] for key, values in bank.items()}
+    return {"questions": valid_questions[:20], "answers": bank["answers"][:20]}
 
 
 def main() -> None:
@@ -52,6 +75,8 @@ def main() -> None:
 
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+
+    from build_dataset import curated_banks
 
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     tokenizer.padding_side = "left"
@@ -71,6 +96,7 @@ def main() -> None:
     torch.manual_seed(42)
 
     banks: dict[str, dict[str, list[str]]] = {}
+    seeds = curated_banks()
     for field, description in FIELDS.items():
         messages = [
             {
@@ -83,10 +109,14 @@ def main() -> None:
             {
                 "role": "user",
                 "content": (
-                    f"For {description}, create exactly 8 diverse questions and 8 diverse "
-                    "applicant answer templates. Return an object with questions and answers. "
+                    f"For {description}, create exactly 25 natural questions and 25 natural "
+                    "applicant answer templates. Every item must ask or answer only that exact "
+                    "fact; do not substitute a related fact. Use these reviewed examples as the "
+                    f"semantic boundary: {json.dumps(seeds[field])}. "
+                    "Return an object with questions and answers. "
                     "Every answer must contain the literal token <VALUE> exactly once. "
-                    "Questions must not contain <VALUE>. Keep every item concise."
+                    "Questions must not contain <VALUE>. Use contractions where natural. "
+                    "Keep every item concise and conversational."
                 ),
             },
         ]
@@ -104,7 +134,7 @@ def main() -> None:
                     do_sample=True,
                     temperature=0.7,
                     top_p=0.9,
-                    max_new_tokens=650,
+                    max_new_tokens=1500,
                     pad_token_id=tokenizer.pad_token_id,
                 )
             text = tokenizer.decode(
@@ -112,7 +142,7 @@ def main() -> None:
                 skip_special_tokens=True,
             )
             try:
-                banks[field] = parse_bank(text)
+                banks[field] = parse_bank(text, field)
                 break
             except (ValueError, json.JSONDecodeError):
                 if attempt == 4:

@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 .venv/
 data/*.jsonl
+data/pilot-v2/
 data/rejected-*.json
 models/
 LLM Coding Challenge for AI_ML Tech Lead1.pdf
