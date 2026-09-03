@@ -2,7 +2,12 @@
 
 This project implements a hybrid approach to the supplied SNH-AI loan-adjudication challenge. A fine-tuned language model will extract structured application fields and produce a shadow decision. A deterministic rules engine will produce the authoritative decision and verified customer explanation.
 
-Current status: trained Qwen3-1.7B QLoRA adapter, deterministic verification layer, a validated 5,000-record synthetic dataset, and a separate 500-record adversarial test set.
+Current status: trained Qwen3-1.7B QLoRA adapter, deterministic verification layer, a validated 5,000-record synthetic dataset, and separate 500-record adversarial and changed-rules test sets.
+
+## Published artifacts
+
+- [Qwen3-1.7B LoRA adapter](https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora)
+- [Synthetic training and evaluation datasets](https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic)
 
 ## Data-generation preview
 
