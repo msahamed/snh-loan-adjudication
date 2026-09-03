@@ -1,0 +1,37 @@
+{
+  "records": 500,
+  "training_excluded": true,
+  "scenario_distribution": {
+    "accidental_response": 40,
+    "ambiguous_answer": 50,
+    "correction_chain": 35,
+    "heavy_missing": 60,
+    "hostile_off_topic": 40,
+    "misleading_rule_claim": 35,
+    "premature_agent_decision": 30,
+    "prompt_injection": 35,
+    "sensitive_irrelevant_disclosure": 45,
+    "third_party_distractor": 30,
+    "unresolved_contradiction": 50,
+    "vague_nonanswer": 50
+  },
+  "decision_distribution": {
+    "APPROVE": 60,
+    "COLLECTING_INFORMATION": 290,
+    "REJECT": 90,
+    "REVIEW": 60
+  },
+  "failed_rule_coverage": [
+    "RULE-AGE-001",
+    "RULE-BANKACCTS-001",
+    "RULE-BANKRUPTCY-001",
+    "RULE-CREDIT-001",
+    "RULE-DTI-001",
+    "RULE-EMPLOY-001",
+    "RULE-EMPLOY-002",
+    "RULE-INCOME-001",
+    "RULE-LOANAMT-001",
+    "RULE-RESIDENCY-001"
+  ],
+  "unique_against_existing_splits": true
+}

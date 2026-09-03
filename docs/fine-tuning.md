@@ -11,7 +11,7 @@ Run:
       --input-dir data \
       --output-dir data/processed
 
-The script validates every record and applies the model's native chat template. The measured maximum is 1,539 tokens, so training will use a 2,048-token limit. Training should use dynamic batch padding and compute loss only on assistant-response tokens; pre-padding every record would waste memory.
+The script validates every record and applies the model's native chat template. The measured maximum is 1,582 tokens, so training uses a 2,048-token limit. Training uses dynamic batch padding and computes loss only on assistant-response tokens; pre-padding every record would waste memory.
 
 ## Baseline
 
@@ -56,3 +56,19 @@ Install the single additional training dependency and run a one-step smoke test:
       --output-dir artifacts/smoke-test
 
 After the smoke test passes, remove the sample and step limits for the full two-epoch run. The script uses NF4 double quantization, rank 16, alpha 32, dropout 0.05, dynamic padding, gradient checkpointing, and response-only loss.
+
+## Fine-tuned evaluation
+
+The final adapter completed 250 training steps. On the untouched 500-record test split it achieved 99.4% shadow-decision accuracy and 95.8% failed-rule exact match. Recomputing from extracted fields produced 100% deterministic decision and citation accuracy.
+
+The separate 500-record adversarial `test-2` set is intentionally harder. It contains contradictions, ambiguous and missing answers, prompt injection, misleading rule claims, third-party values, premature decisions, and irrelevant sensitive disclosures. Results were:
+
+- 100% valid JSON and schema
+- 97.56% field accuracy
+- 87.8% shadow-decision accuracy
+- 91.8% model failed-rule exact match
+- 88.8% deterministic decision accuracy
+- 95.6% deterministic failed-rule exact match
+- 0 unsupported rule IDs
+
+The deterministic layer corrected 20 citation sets and 6 decisions when field extraction was accurate. It could not recover 56 decisions where ambiguous or contradictory dialogue was converted into a concrete field value. This identifies a required pre-adjudication safeguard: unresolved or conflicting evidence must block adjudication before rules run.

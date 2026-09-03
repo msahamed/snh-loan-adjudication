@@ -50,6 +50,10 @@ def metric_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     tp = sum(item["failed_rule_tp"] for item in results)
     fp = sum(item["failed_rule_fp"] for item in results)
     fn = sum(item["failed_rule_fn"] for item in results)
+    predicted_citations = sum(item["predicted_rule_id_count"] for item in results)
+    unsupported_citations = sum(
+        item["unsupported_rule_id_count"] for item in results
+    )
 
     def ratio(numerator: int, denominator: int) -> float:
         return round(numerator / denominator, 4) if denominator else 0.0
@@ -79,6 +83,12 @@ def metric_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         ),
         "failed_rule_precision": ratio(tp, tp + fp),
         "failed_rule_recall": ratio(tp, tp + fn),
+        "unsupported_rule_id_rate": ratio(
+            unsupported_citations, predicted_citations
+        ),
+        "records_with_unsupported_rule_ids_rate": ratio(
+            sum(item["unsupported_rule_id_count"] > 0 for item in results), total
+        ),
         "engine_decision_accuracy": ratio(
             sum(item["engine_decision_correct"] for item in results), total
         ),
@@ -102,6 +112,7 @@ def score_prediction(
         "case_id": record["metadata"]["case_id"],
         "expected": expected,
         "expected_decision": expected["decision"],
+        "adversarial_scenario": record["metadata"].get("adversarial_scenario"),
         "generated_text": generated_text,
         "json_valid": False,
         "schema_valid": False,
@@ -114,6 +125,8 @@ def score_prediction(
         "failed_rule_tp": 0,
         "failed_rule_fp": 0,
         "failed_rule_fn": len(expected["failed_rule_ids"]),
+        "predicted_rule_id_count": 0,
+        "unsupported_rule_id_count": 0,
         "engine_decision_correct": False,
         "engine_failed_rules_exact": False,
         "model_engine_decision_agree": False,
@@ -149,9 +162,14 @@ def score_prediction(
     base["decision_correct"] = prediction.get("decision") == expected["decision"]
 
     predicted_ids = prediction.get("failed_rule_ids", [])
-    if not isinstance(predicted_ids, list):
+    if isinstance(predicted_ids, list):
+        predicted_ids = [item for item in predicted_ids if isinstance(item, str)]
+    else:
         predicted_ids = []
     predicted_set, expected_set = set(predicted_ids), set(expected["failed_rule_ids"])
+    supplied_ids = {rule["id"] for rule in record["input"]["rules"]}
+    base["predicted_rule_id_count"] = len(predicted_set)
+    base["unsupported_rule_id_count"] = len(predicted_set - supplied_ids)
     base["failed_rules_exact"] = predicted_set == expected_set
     base["failed_rule_tp"] = len(predicted_set & expected_set)
     base["failed_rule_fp"] = len(predicted_set - expected_set)
@@ -245,6 +263,19 @@ def main() -> None:
         for result in results:
             handle.write(json.dumps(result, sort_keys=True) + "\n")
     summary = metric_summary(results)
+    adversarial_scenarios = sorted({
+        item["adversarial_scenario"]
+        for item in results
+        if item["adversarial_scenario"] is not None
+    })
+    if adversarial_scenarios:
+        summary["by_scenario"] = {
+            scenario: metric_summary([
+                item for item in results
+                if item["adversarial_scenario"] == scenario
+            ])
+            for scenario in adversarial_scenarios
+        }
     (args.output_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
 
