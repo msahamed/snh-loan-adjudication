@@ -129,18 +129,18 @@ def adjudicate(
 
     def reason(rule: dict[str, Any], actual: Any, expected: Any) -> str:
         templates = {
-            "RULE-AGE-001": lambda: f"The applicant is {actual}. The minimum age is {expected}.",
-            "RULE-CREDIT-001": lambda: f"The reported credit score is {actual}. The minimum is {expected}.",
-            "RULE-INCOME-001": lambda: f"The reported annual income is ${actual:,.2f}. The minimum is ${expected:,.2f}.",
-            "RULE-DTI-001": lambda: f"The reported debt-to-income ratio is {actual}%. The maximum is {expected}%.",
-            "RULE-EMPLOY-001": lambda: "The reported employment status does not meet the current employment requirement.",
-            "RULE-EMPLOY-002": lambda: f"The reported employment duration is {actual} {'month' if actual == 1 else 'months'}. At least {expected} months is required.",
-            "RULE-RESIDENCY-001": lambda: "The reported residency status does not meet the current residency requirement.",
-            "RULE-BANKRUPTCY-001": lambda: "The applicant reported a bankruptcy filing within the last seven years.",
-            "RULE-LOANAMT-001": lambda: f"The requested amount is ${actual:,.2f}. The maximum for the reported income is ${expected:,.2f}.",
-            "RULE-BANKACCTS-001": lambda: "The applicant does not have an active bank account that can be verified.",
+            "age": lambda: f"The applicant is {actual}. The minimum age is {expected}.",
+            "credit_score": lambda: f"The reported credit score is {actual}. The minimum is {expected}.",
+            "annual_income_usd": lambda: f"The reported annual income is ${actual:,.2f}. The minimum is ${expected:,.2f}.",
+            "debt_to_income_ratio_percent": lambda: f"The reported debt-to-income ratio is {actual}%. The maximum is {expected}%.",
+            "employment_status": lambda: "The reported employment status does not meet the current employment requirement.",
+            "current_employment_duration_months": lambda: f"The reported employment duration is {actual} {'month' if actual == 1 else 'months'}. At least {expected} months is required.",
+            "residency_status": lambda: "The reported residency status does not meet the current residency requirement.",
+            "has_bankruptcy_recent": lambda: "The applicant reported a bankruptcy filing within the configured lookback period.",
+            "requested_amount_usd": lambda: f"The requested amount is ${actual:,.2f}. The maximum for the reported income is ${expected:,.2f}.",
+            "has_verifiable_bank_account": lambda: "The applicant does not have an active bank account that can be verified.",
         }
-        return templates[rule["id"]]()
+        return templates[field_key(rule)]()
 
     reasons = [reason(rule, actual, expected) for rule, actual, expected in failed]
     return decision, failed_ids, " ".join(reasons)

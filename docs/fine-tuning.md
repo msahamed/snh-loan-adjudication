@@ -72,3 +72,17 @@ The separate 500-record adversarial `test-2` set is intentionally harder. It con
 - 0 unsupported rule IDs
 
 The deterministic layer corrected 20 citation sets and 6 decisions when field extraction was accurate. It could not recover 56 decisions where ambiguous or contradictory dialogue was converted into a concrete field value. This identifies a required pre-adjudication safeguard: unresolved or conflicting evidence must block adjudication before rules run.
+
+### Changed-rules test
+
+Test-3 uses 500 test-1 dialogues with unseen thresholds, categorical allowances, failure actions, rule IDs, and rule ordering. No retraining was performed. Results were:
+
+- 100% valid JSON and 93.2% exact schema
+- 96.6% field accuracy
+- 78.6% shadow-decision accuracy
+- 53.0% model failed-rule exact match
+- 91.6% deterministic decision accuracy
+- 75.4% deterministic failed-rule exact match
+- 2.2% of records contained an unsupported rule ID
+
+The deterministic layer corrected 94 model decisions and 129 citation sets. The model was not fully rule-agnostic: it often removed values that the new policy disallowed instead of preserving the reported value for deterministic evaluation. Of 170 field errors, 140 were residency status and 25 were employment status. Future training should separate extraction from policy evaluation more strongly and include multiple rulesets during training.

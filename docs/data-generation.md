@@ -27,3 +27,11 @@ Build the separate robustness set with:
     python scripts/build_adversarial_test.py
 
 This creates 500 records in `data/test-2.jsonl`. The set is excluded from training and validation. It tests heavy missingness, contradictions, vague and accidental answers, hostile or off-topic responses, corrections, misleading rule claims, prompt injection, third-party facts, premature agent decisions, and irrelevant sensitive disclosures. Labels still come only from the deterministic rules engine.
+
+## Changed-rules test set
+
+Build the paired policy-change set with:
+
+    python scripts/build_changed_rules_test.py
+
+This creates `data/test-3.jsonl` from the same unseen dialogues as test-1 while replacing ruleset 1.0 with four ruleset 2.0 test variants. Thresholds, allowed categories, failure actions, rule IDs, and rule order change. The deterministic engine recomputes every label; 174 decisions and 348 citation sets differ from test-1. This controlled design isolates rule adaptability from dialogue difficulty.

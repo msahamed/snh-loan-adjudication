@@ -1,0 +1,249 @@
+{
+  "records": 500,
+  "ruleset_version": "2.0-test",
+  "training_excluded": true,
+  "paired_with_test_1": true,
+  "decision_distribution": {
+    "APPROVE": 89,
+    "COLLECTING_INFORMATION": 100,
+    "REJECT": 242,
+    "REVIEW": 69
+  },
+  "decision_distribution_by_variant": {
+    "strict": {
+      "APPROVE": 2,
+      "COLLECTING_INFORMATION": 22,
+      "REJECT": 98,
+      "REVIEW": 3
+    },
+    "lenient": {
+      "APPROVE": 66,
+      "COLLECTING_INFORMATION": 23,
+      "REJECT": 19,
+      "REVIEW": 17
+    },
+    "review_focused": {
+      "APPROVE": 13,
+      "COLLECTING_INFORMATION": 30,
+      "REJECT": 51,
+      "REVIEW": 31
+    },
+    "mixed": {
+      "APPROVE": 8,
+      "COLLECTING_INFORMATION": 25,
+      "REJECT": 74,
+      "REVIEW": 18
+    }
+  },
+  "decisions_changed_from_test_1": 174,
+  "citation_sets_changed_from_test_1": 348,
+  "failed_rule_coverage": [
+    "POLICY2-BANK-VERIFICATION",
+    "POLICY2-BANKRUPTCY",
+    "POLICY2-CREDIT-FLOOR",
+    "POLICY2-DTI-CAP",
+    "POLICY2-INCOME-FLOOR",
+    "POLICY2-INCOME-SOURCE",
+    "POLICY2-LEGAL-AGE",
+    "POLICY2-LOAN-INCOME-CAP",
+    "POLICY2-RESIDENCY",
+    "POLICY2-STABILITY-PERIOD"
+  ],
+  "rule_profiles": {
+    "strict": {
+      "age": {
+        "value": 21
+      },
+      "credit_score": {
+        "value": 720
+      },
+      "annual_income_usd": {
+        "value": 45000
+      },
+      "debt_to_income_ratio_percent": {
+        "value": 35
+      },
+      "employment_status": {
+        "value": [
+          "employed_full_time",
+          "self_employed",
+          "retired"
+        ]
+      },
+      "current_employment_duration_months": {
+        "value": 12,
+        "action_on_fail": "REJECT",
+        "severity": "CRITICAL"
+      },
+      "residency_status": {
+        "value": [
+          "US_Citizen"
+        ],
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MINOR"
+      },
+      "has_bankruptcy_recent": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MAJOR"
+      },
+      "requested_amount_usd": {
+        "multiplier_value": 0.35,
+        "action_on_fail": "REJECT",
+        "severity": "CRITICAL"
+      },
+      "has_verifiable_bank_account": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MAJOR"
+      }
+    },
+    "lenient": {
+      "age": {
+        "value": 16
+      },
+      "credit_score": {
+        "value": 500
+      },
+      "annual_income_usd": {
+        "value": 15000
+      },
+      "debt_to_income_ratio_percent": {
+        "value": 60
+      },
+      "employment_status": {
+        "value": [
+          "employed_full_time",
+          "employed_part_time",
+          "self_employed",
+          "retired",
+          "unemployed",
+          "student"
+        ]
+      },
+      "current_employment_duration_months": {
+        "value": 0
+      },
+      "residency_status": {
+        "value": [
+          "US_Citizen",
+          "Permanent_Resident",
+          "Temporary_Visa",
+          "Non_Resident"
+        ]
+      },
+      "has_bankruptcy_recent": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MINOR"
+      },
+      "requested_amount_usd": {
+        "multiplier_value": 0.8
+      },
+      "has_verifiable_bank_account": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MINOR"
+      }
+    },
+    "review_focused": {
+      "age": {
+        "value": 19
+      },
+      "credit_score": {
+        "value": 680
+      },
+      "annual_income_usd": {
+        "value": 32000
+      },
+      "debt_to_income_ratio_percent": {
+        "value": 42
+      },
+      "employment_status": {
+        "value": [
+          "employed_full_time",
+          "employed_part_time",
+          "self_employed",
+          "retired"
+        ]
+      },
+      "current_employment_duration_months": {
+        "value": 9
+      },
+      "residency_status": {
+        "value": [
+          "US_Citizen",
+          "Permanent_Resident",
+          "Temporary_Visa"
+        ],
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MINOR"
+      },
+      "has_bankruptcy_recent": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MAJOR"
+      },
+      "requested_amount_usd": {
+        "multiplier_value": 0.6
+      },
+      "has_verifiable_bank_account": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MAJOR"
+      }
+    },
+    "mixed": {
+      "age": {
+        "value": 20
+      },
+      "credit_score": {
+        "value": 650
+      },
+      "annual_income_usd": {
+        "value": 40000
+      },
+      "debt_to_income_ratio_percent": {
+        "value": 45
+      },
+      "employment_status": {
+        "value": [
+          "employed_full_time",
+          "employed_part_time",
+          "self_employed",
+          "retired"
+        ]
+      },
+      "current_employment_duration_months": {
+        "value": 12
+      },
+      "residency_status": {
+        "value": [
+          "US_Citizen"
+        ],
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MINOR"
+      },
+      "has_bankruptcy_recent": {
+        "action_on_fail": "REJECT",
+        "severity": "CRITICAL"
+      },
+      "requested_amount_usd": {
+        "multiplier_value": 0.4,
+        "action_on_fail": "REJECT",
+        "severity": "CRITICAL"
+      },
+      "has_verifiable_bank_account": {
+        "action_on_fail": "FLAG_REVIEW",
+        "severity": "MAJOR"
+      }
+    }
+  },
+  "renamed_rule_ids": {
+    "age": "POLICY2-LEGAL-AGE",
+    "credit_score": "POLICY2-CREDIT-FLOOR",
+    "annual_income_usd": "POLICY2-INCOME-FLOOR",
+    "debt_to_income_ratio_percent": "POLICY2-DTI-CAP",
+    "employment_status": "POLICY2-INCOME-SOURCE",
+    "current_employment_duration_months": "POLICY2-STABILITY-PERIOD",
+    "residency_status": "POLICY2-RESIDENCY",
+    "has_bankruptcy_recent": "POLICY2-BANKRUPTCY",
+    "requested_amount_usd": "POLICY2-LOAN-INCOME-CAP",
+    "has_verifiable_bank_account": "POLICY2-BANK-VERIFICATION"
+  },
+  "rules_reordered_per_record": true
+}

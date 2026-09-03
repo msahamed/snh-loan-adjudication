@@ -22,6 +22,10 @@ Build the training-excluded adversarial set with:
 
     python scripts/build_adversarial_test.py
 
+Build the paired changed-rules test with:
+
+    python scripts/build_changed_rules_test.py
+
 ## Fine-tuning
 
 See [the fine-tuning guide](docs/fine-tuning.md) for preprocessing, baseline evaluation, and QLoRA training commands.

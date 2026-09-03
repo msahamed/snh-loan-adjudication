@@ -113,6 +113,7 @@ def score_prediction(
         "expected": expected,
         "expected_decision": expected["decision"],
         "adversarial_scenario": record["metadata"].get("adversarial_scenario"),
+        "ruleset_variant": record["metadata"].get("ruleset_variant"),
         "generated_text": generated_text,
         "json_valid": False,
         "schema_valid": False,
@@ -275,6 +276,19 @@ def main() -> None:
                 if item["adversarial_scenario"] == scenario
             ])
             for scenario in adversarial_scenarios
+        }
+    ruleset_variants = sorted({
+        item["ruleset_variant"]
+        for item in results
+        if item["ruleset_variant"] is not None
+    })
+    if ruleset_variants:
+        summary["by_ruleset_variant"] = {
+            variant: metric_summary([
+                item for item in results
+                if item["ruleset_variant"] == variant
+            ])
+            for variant in ruleset_variants
         }
     (args.output_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
