@@ -316,7 +316,7 @@ export default function Application() {
   const modelJson = JSON.stringify({ ...example.application, ...example.model }, null, 2);
 
   return (
-    <main>
+    <main className="application-shell">
       <AppHeader />
 
       <section className="intro">
