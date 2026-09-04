@@ -16,10 +16,21 @@
 html, body { margin: 0; min-height: 100%; }
 
 body {
+  padding: 24px;
   color: var(--ink);
   background: #edf0ee;
   font-family: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+main {
+  width: min(100%, 1460px);
+  min-height: calc(100vh - 48px);
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
 }
 
 button, input { font: inherit; }
@@ -203,6 +214,7 @@ footer { height: 48px; padding: 0 32px; display: flex; align-items: center; just
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 1120px) {
+  body { padding: 16px; }
   .intro { align-items: flex-start; flex-direction: column; }
   .scenario-picker { width: 100%; min-width: 0; }
   .workspace { grid-template-columns: 1fr; }
@@ -211,6 +223,8 @@ footer { height: 48px; padding: 0 32px; display: flex; align-items: center; just
 }
 
 @media (max-width: 600px) {
+  body { padding: 0; }
+  main { min-height: 100vh; border: 0; border-radius: 0; }
   .topbar { height: 62px; padding: 0 18px; }
   .header-status .divider, .header-status .ruleset { display: none; }
   .intro { padding: 25px 18px 20px; }
