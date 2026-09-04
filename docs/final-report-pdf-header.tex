@@ -13,22 +13,23 @@
 \setmainfont{Avenir Next}
 \setsansfont{Avenir Next}
 \setmonofont{Menlo}
-\titleformat{\section}{\fontsize{20}{24}\selectfont\bfseries\color{SNHInk}}{}{0pt}{}
-\titleformat{\subsection}{\Needspace{12\baselineskip}\fontsize{14}{17}\selectfont\bfseries\color{SNHTeal}}{}{0pt}{}
-\titlespacing*{\section}{0pt}{0pt}{11pt}
-\titlespacing*{\subsection}{0pt}{18pt}{7pt}
-\setlist[itemize]{leftmargin=17pt,itemsep=3pt,topsep=5pt,parsep=0pt}
+\titleformat{\section}{\fontsize{17}{20}\selectfont\bfseries\color{SNHInk}}{}{0pt}{}
+\titleformat{\subsection}{\fontsize{12}{15}\selectfont\bfseries\color{SNHTeal}}{}{0pt}{}
+\titleformat{\paragraph}[block]{\centering\fontsize{11}{14}\selectfont\bfseries\color{SNHInk}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{0pt}{7pt}
+\titlespacing*{\subsection}{0pt}{9pt}{3pt}
+\titlespacing*{\paragraph}{0pt}{9pt}{4pt}
+\setlist[itemize]{leftmargin=17pt,itemsep=1pt,topsep=3pt,parsep=0pt}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{7pt}
+\setlength{\parskip}{4pt}
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\footnotesize\color{SNHMuted}AI Loan Adjudication}
 \rhead{\footnotesize\color{SNHMuted}Sabber Ahamed}
 \cfoot{\footnotesize\color{SNHMuted}\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
-\hypersetup{colorlinks=true,linkcolor=SNHTeal,urlcolor=SNHTeal,citecolor=SNHTeal}
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=SNHTeal,urlcolor=SNHTeal,citecolor=SNHTeal}}
+\let\SNHOriginalHref\href
+\renewcommand{\href}[2]{\SNHOriginalHref{#1}{\textcolor{SNHTeal}{#2}}}
 \AtBeginEnvironment{longtable}{\footnotesize}
-\renewenvironment{Shaded}
-  {\begin{center}\begin{minipage}{0.88\linewidth}\begin{snugshade}\footnotesize}
-  {\end{snugshade}\end{minipage}\end{center}}
 \raggedbottom

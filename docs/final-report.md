@@ -1,70 +1,100 @@
 # AI Loan Adjudication: Final Report
 
-**Sabber Ahamed · September 3, 2026**
+**Sabber Ahamed · September 4, 2026**
 
-## Business problem
+## Objective
 
-I defined the goal as turning a loan-application conversation into an **adjudication decision plus a clear rationale for the customer**. The four possible outcomes are **Approved, Rejected, Human review, and Needs information**.
+I treated this project as an MVP for a near-real-time, customer-facing loan adjudication process. It uses a loan conversation to determine one of four outcomes: **Approve, Reject, Human review,** or **Needs information**, with a clear reason based on the supplied lending rules.
 
-The language model structures the conversation. The deterministic rules engine then recalculates the decision and reasons from the active lending rules. Clear applications can finish automatically, missing information returns to the chatbot, and review cases or disagreements go to a person. Because policy stays outside the model, rules can change and new clients can be added without retraining a policy-specific model.
+## [System design](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md)
 
-## System I built
+I used a hybrid design that combines an LLM with deterministic rules to improve pipeline reliability and support regulatory requirements. The model remains rule-agnostic, so updated rules can be supplied without additional fine-tuning.
 
-```text
-                               CUSTOMER DIALOGUE
-                                       ↓
-                              QWEN3-1.7B + LORA
-                           10 fields + shadow result
-                                       ↓
-                          SCHEMA & EVIDENCE VALIDATION
-                                       ↓
-                           DETERMINISTIC RULES ENGINE
-                           decision + failed rule IDs
-                                       ↓
-                            VERIFIED CUSTOMER OUTPUT
-                       adjudication decision + rationale
+- **Qwen3-1.7B + LoRA** extracts and normalizes ten application fields from the conversation.
+- **A deterministic rules engine** makes the final decision and identifies failed rules.
+- **Human review** handles missing or conflicting information, invalid output, and model-engine disagreement.
+
+**Flow:** Dialogue $\rightarrow$ field extraction $\rightarrow$ schema validation $\rightarrow$ rules engine $\rightarrow$ decision and explanation
+
+### Why I used this design
+
+- Lending thresholds and decisions must be repeatable.
+- Client rules can change without retraining the model.
+- Explanations come from verified rules, making them easier to audit and support.
+
+The fine-tuned model produces a shadow loan decision and a short explanation for evaluation. The rules engine is authoritative: it makes the final decision from the extracted fields and active rules, then compares its result with the model's shadow decision.
+
+## [Model and training](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/fine-tuning.md)
+
+### Data
+
+I generated synthetic dialogues that collect the ten required fields while varying scenarios such as missing or vague answers, corrections, contradictions, typos, and adversarial prompts.
+
+- **Core split:** 4,000 train, 500 validation, and 500 clean test conversations.
+- **Test-2:** 500 adversarial conversations excluded from training.
+- **Test-3:** 500 test conversations evaluated under unseen rules without retraining.
+
+The model receives the raw dialogue and predefined rules as input. It returns a flat JSON object containing the extracted fields, a shadow decision, a short explanation, and any failed rule IDs. The deterministic layer then evaluates the extracted fields against the active rules.
+
+Abbreviated training-target example (remaining extracted fields omitted):
+
+```json
+{
+  "employment_status": "unemployed",
+  "current_employment_duration_months": 0,
+  "decision": "REJECT",
+  "failed_rule_ids": ["RULE-EMPLOY-001", "RULE-EMPLOY-002"],
+  "explanation": "Employment status and duration do not meet the rules."
+}
 ```
 
-The model returns JSON containing ten extracted fields, a shadow decision, failed rule IDs, and a short explanation. That output is only a proposal. Validation blocks invalid or unresolved values. The rules engine evaluates every active rule again and applies **Rejected > Human review > Approved** precedence. Missing information blocks a lending decision. The customer rationale is generated only from the verified result.
 
-## Why the deterministic layer is necessary
+### Training setup
 
-An incorrect lending explanation has regulatory and client costs. The U.S. Consumer Financial Protection Bureau states that adverse-action reasons must be specific and accurately describe the factors considered. A complex algorithm does not remove that obligation. [CFPB Circular 2022-03](https://www.consumerfinance.gov/compliance/circulars/circular-2022-03-adverse-action-notification-requirements-in-connection-with-credit-decisions-based-on-complex-algorithms/)
+- Qwen's native chat template and special tokens
+- 2,048-token limit; longest example was 1,582 tokens
+- Dynamic padding and loss only on assistant-response tokens
+- QLoRA for two epochs and 250 steps
+- Final adapter size: about 84 MB
 
-I use the model for language understanding and code for decision authority. This produces repeatable decisions, verifies the rule IDs and thresholds shown to the customer, supports policy updates without retraining, and creates an auditable record. Model-engine disagreements trigger human review. This design does not by itself prove fair-lending compliance; policy, data use, and outcomes still require legal and fairness review.
+I chose Qwen3-1.7B because this is a narrow JSON-output task. The small model and LoRA adapter are easier to serve and version; latency and cost still need production benchmarking.
 
-## Why I selected Qwen3-1.7B
-
-This is a narrow structured-output task, and the rules arrive with each request rather than being memorized. Qwen3-1.7B should cost less and respond faster than a 14B serving model, although production benchmarks are still needed. LoRA produced an adapter of about 84 MB, which is easy to store and version. A larger model may interpret harder language better, but it still cannot guarantee correct policy citations.
-
-## Data and training
-
-- **Core data:** 4,000 training, 500 validation, and 500 clean test conversations.
-- **Adversarial Test-2:** 500 messy conversations excluded from training.
-- **Changed-rules Test-3:** 500 conversations evaluated with unseen rules and no retraining.
-- **Coverage:** missing values, boundaries, aliases, corrections, contradictions, ambiguity, irrelevant text, and typos.
-- **Ground truth and training:** code generated the labels; I trained a QLoRA adapter for two epochs and 250 steps.
-
-I published the [model adapter](https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora) and [6,000 dataset records](https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic) on Hugging Face.
+**Artifacts:** [LoRA adapter](https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora) · [6,000-record dataset](https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic) · [full metrics and confusion matrices](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/evaluation-metrics.md)
 
 ## Evaluation results
 
-I measured the model in generation mode and the verified rules-engine output separately.
+Validation was used for model selection. Test-1 measures performance on clean, unseen cases. Test-2 covers adversarial dialogue, including vague answers, accidental statements, prompt injection, and other edge cases. For Test-3, I changed the rules to measure how well the system handles rules it did not see during training. Accuracy measures overall correctness, macro F1 gives each outcome equal weight, and citation exact match requires the complete set of failed rule IDs to be correct.
 
-| Evaluation set | Purpose | Model decision | Rules-engine decision | Model citations | Verified citations |
-|---|---|---:|---:|---:|---:|
-| Validation | Model selection | 99.4% | 99.4% | 97.2% | 100.0% |
-| Test-1 | Clean unseen cases | 99.4% | 100.0% | 95.8% | 100.0% |
-| Test-2 | Adversarial dialogue | 87.8% | 88.8% | 91.8% | 95.6% |
-| Test-3 | Changed rules | 78.6% | 91.6% | 53.0% | 75.4% |
+#### Overall results
 
-- On Test-1, the rules engine corrected the remaining decision and citation errors.
-- On Test-2, it corrected 6 decisions and 20 citation sets when extraction was accurate.
-- On Test-3, it corrected 94 decisions and 129 citation sets. Expected-rejection false approvals fell from 19 to zero.
-- The main weakness is extraction: a vague or contradictory answer can become a plausible but wrong value that the rules engine cannot repair.
+| Set | Model accuracy | Model macro F1 | Deterministic accuracy | Deterministic citation match |
+|---|---:|---:|---:|---:|
+| Validation | 99.4% | 99.3% | 99.4% | 100.0% |
+| Test-1 | 99.4% | 99.4% | 100.0% | 100.0% |
+| Test-2 | 87.8% | 87.3% | 88.8% | 95.6% |
+| Test-3 | 78.6% | 75.1% | 91.6% | 75.4% |
 
-## Business conclusion and production boundary
+#### Test-1 model results by outcome
 
-The experiment supports a hybrid product. The small model keeps language processing relatively inexpensive. Deterministic verification avoids a second verification model, makes policy changes faster, supports new-client onboarding, and gives current clients an explanation they can audit.
+| Outcome | Model precision | Model recall | Model F1 | Support |
+|---|---:|---:|---:|---:|
+| Approve | 97.7% | 100.0% | 98.8% | 125 |
+| Human review | 100.0% | 99.0% | 99.5% | 100 |
+| Reject | 100.0% | 98.9% | 99.4% | 175 |
+| Needs information | 100.0% | 100.0% | 100.0% | 100 |
 
-I would not use this prototype for unsupervised real-world credit decisions yet. The results measure synthetic dialogue and supplied-rule fidelity, not borrower risk or regulatory approval. A production pilot needs evidence grounding for every value, stronger ambiguity detection, versioned audit logs, representative real-world evaluation, cost and latency benchmarks, and human review for missing information, conflicts, configured review outcomes, or model-engine disagreement.
+The model made three Test-1 decision errors. Recalculating the decisions with the rules engine produced 100% precision and recall for every class.
+
+### Main findings
+
+- **Clean test:** deterministic accuracy and citation match reached 100%.
+- **Adversarial test:** the model incorrectly adjudicated 55 of 290 incomplete applications. The rules engine cannot fix a plausible but unsupported extracted value.
+- **Changed rules:** deterministic recalculation increased accuracy from 78.6% to 91.6% and reduced false approvals of expected rejections from 19 to zero.
+
+## Experiment takeaway
+
+The experiment shows that a small model can handle the conversation while deterministic code keeps lending decisions inspectable. The same design supports new client rules without training a separate model for each client.
+
+### Next iteration
+
+- Ground fields in dialogue evidence, detect conflicts, add audit logs, and test with client data.
