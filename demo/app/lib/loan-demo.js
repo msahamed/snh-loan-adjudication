@@ -14,7 +14,7 @@ export const rules = [
 export const examples = [
   {
     id: "approve",
-    short: "Accept",
+    short: "Approved",
     title: "Clean approval",
     description: "All reported values satisfy the active policy.",
     accent: "green",
@@ -44,7 +44,7 @@ export const examples = [
   },
   {
     id: "reject",
-    short: "Corrected reject",
+    short: "Rejected",
     title: "Model error caught",
     description: "The model approves, but verified income is below policy.",
     accent: "red",
@@ -74,7 +74,7 @@ export const examples = [
   },
   {
     id: "review",
-    short: "Escalate",
+    short: "Human review",
     title: "Human review",
     description: "Two review rules fail; no automatic rejection applies.",
     accent: "amber",
@@ -104,7 +104,7 @@ export const examples = [
   },
   {
     id: "collect",
-    short: "Need information",
+    short: "Needs information",
     title: "Incomplete application",
     description: "Age is unresolved, so no lending decision is made.",
     accent: "blue",
@@ -246,10 +246,10 @@ export const examples = [
 ];
 
 export const decisionMeta = {
-  APPROVE: { label: "Accept", route: "Straight-through approval", tone: "green", customer: "Your application meets the current requirements." },
-  REJECT: { label: "Reject", route: "Decline with verified reason", tone: "red", customer: "We’re unable to approve this application based on the current requirements." },
-  REVIEW: { label: "Escalate", route: "Human credit review", tone: "amber", customer: "Your application needs a specialist review before we can make a final decision." },
-  COLLECTING_INFORMATION: { label: "Continue", route: "Return to chatbot", tone: "blue", customer: "I need a little more information before assessing your application." },
+  APPROVE: { label: "Approved", route: "Straight-through approval", tone: "green", customer: "Your application meets the current requirements." },
+  REJECT: { label: "Rejected", route: "Decline with verified reason", tone: "red", customer: "We’re unable to approve this application based on the current requirements." },
+  REVIEW: { label: "Human review", route: "Human credit review", tone: "amber", customer: "Your application needs a specialist review before we can make a final decision." },
+  COLLECTING_INFORMATION: { label: "Needs information", route: "Return to chatbot", tone: "blue", customer: "I need a little more information before assessing your application." },
 };
 
 export const projectLinks = {

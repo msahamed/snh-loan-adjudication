@@ -6,13 +6,6 @@ const steps = [
   { id: "decision", label: "Decision trace" },
 ];
 
-const statusLabels = {
-  APPROVE: "Approved",
-  REJECT: "Rejected",
-  REVIEW: "Human review",
-  COLLECTING_INFORMATION: "Needs information",
-};
-
 export function DemoHeader({ activeStep, caseId }) {
   const hrefFor = (step) => {
     if (!caseId) return "/application-flow/approve";
@@ -69,7 +62,7 @@ export function CaseSidebar({ selectedId }) {
             <span className={`scenario-dot ${item.accent}`} />
             <span>
               <b>Application-{index + 1}</b>
-              <small>Status: {statusLabels[adjudicate(item.application).decision]}</small>
+              <small>Status: {decisionMeta[adjudicate(item.application).decision].label}</small>
             </span>
           </Link>
         ))}
