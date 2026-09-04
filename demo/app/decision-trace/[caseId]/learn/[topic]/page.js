@@ -342,6 +342,32 @@ export default async function LearnDecisionStep({ params }) {
             </section>
           )}
 
+          {topic === "customer-response" && (
+            <section className="learn-json" aria-labelledby="customer-json-title">
+              <div>
+                <p className="panel-label">Actual output</p>
+                <h2 id="customer-json-title">Customer and audit JSON</h2>
+                <p>The customer receives plain language. Technical rule citations remain in the internal audit record.</p>
+              </div>
+              <pre><code>{JSON.stringify({
+                customer_response: {
+                  status: decisionMeta[engine.decision].label,
+                  message: engine.decision === "APPROVE"
+                    ? decisionMeta[engine.decision].customer
+                    : `${decisionMeta[engine.decision].customer} ${engine.explanation}`,
+                },
+                audit_record: {
+                  ruleset_version: "1.0",
+                  model_decision: example.model.decision,
+                  verified_decision: engine.decision,
+                  decision_corrected: example.model.decision !== engine.decision,
+                  failed_rule_ids: engine.failed_rule_ids,
+                  verified_explanation: engine.explanation,
+                },
+              }, null, 2)}</code></pre>
+            </section>
+          )}
+
           <section className="learn-explanation">
             <div>
               <p className="panel-label">Why this step exists</p>
