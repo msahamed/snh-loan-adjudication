@@ -239,20 +239,6 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .journey-step.active { color: white; background: rgba(255,255,255,.09); }
 .journey-step.active span { color: var(--navy); background: #cfe4dc; border-color: #cfe4dc; }
 
-.selection-scroll { min-height: 0; flex: 1 1 auto; overflow-y: auto; background: #f7f9f8; }
-.selection-page { width: min(100%, 1040px); margin: 0 auto; padding: clamp(48px, 7vh, 76px) 34px 64px; }
-.selection-heading { max-width: 620px; }
-.selection-heading h1 { font-size: clamp(30px, 4vw, 44px); }
-.selection-heading > p:last-child { margin: 14px 0 0; color: var(--muted); font-size: 16px; line-height: 1.55; }
-.case-card-grid { margin-top: 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.case-card { min-height: 210px; padding: 24px; display: flex; flex-direction: column; color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 8px; text-decoration: none; transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease; }
-.case-card:hover { border-color: #9daba5; box-shadow: 0 8px 24px rgba(24,32,30,.07); transform: translateY(-2px); }
-.case-card-top { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 11px; font-weight: 700; }
-.case-card h2 { margin: 24px 0 0; font-size: 21px; }
-.case-card p { max-width: 420px; margin: 8px 0 24px; color: var(--muted); font-size: 14px; line-height: 1.5; }
-.case-card-link { margin-top: auto; color: var(--blue); font-size: 13px; font-weight: 750; }
-.case-card-link span { margin-left: 5px; }
-
 .conversation-layout { min-height: 0; flex: 1 1 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); overflow: hidden; background: #f7f9f8; }
 .fixed-case-sidebar { height: 100%; }
 .fixed-case-sidebar .case-item { text-decoration: none; }
@@ -379,10 +365,6 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .case-list { padding: 6px; }
   .case-item { padding: 10px 7px; }
   .case-item small, .sidebar-note { display: none; }
-  .selection-page { padding: 34px 18px 44px; }
-  .selection-heading h1 { font-size: 30px; }
-  .case-card-grid { grid-template-columns: 1fr; margin-top: 28px; }
-  .case-card { min-height: 180px; }
   .conversation-layout { grid-template-columns: 132px minmax(0, 1fr); }
   .fixed-case-sidebar .sidebar-back { margin: auto 8px 12px; font-size: 10px; }
   .conversation-head { min-height: 72px; padding: 12px 14px; }

@@ -1,16 +1,21 @@
 import Link from "next/link";
-import { decisionMeta, examples } from "../lib/loan-demo";
+import { adjudicate, decisionMeta, examples } from "../lib/loan-demo";
 
 const steps = [
-  { id: "select", label: "Select case" },
   { id: "conversation", label: "Customer dialogue" },
   { id: "decision", label: "Decision trace" },
 ];
 
+const statusLabels = {
+  APPROVE: "Approved",
+  REJECT: "Rejected",
+  REVIEW: "Human review",
+  COLLECTING_INFORMATION: "Needs information",
+};
+
 export function DemoHeader({ activeStep, caseId }) {
   const hrefFor = (step) => {
-    if (step === "select") return "/select-loan-application";
-    if (!caseId) return "/select-loan-application";
+    if (!caseId) return "/application-flow/approve";
     return step === "conversation" ? `/application-flow/${caseId}` : `/decision-trace/${caseId}`;
   };
 
@@ -54,7 +59,7 @@ export function CaseSidebar({ selectedId }) {
         <h2>Applications</h2>
       </div>
       <nav className="case-list" aria-label="Sample applications">
-        {examples.map((item) => (
+        {examples.map((item, index) => (
           <Link
             key={item.id}
             href={`/application-flow/${item.id}`}
@@ -63,13 +68,13 @@ export function CaseSidebar({ selectedId }) {
           >
             <span className={`scenario-dot ${item.accent}`} />
             <span>
-              <b>{item.short}</b>
-              <small>{item.title}</small>
+              <b>Application-{index + 1}</b>
+              <small>Status: {statusLabels[adjudicate(item.application).decision]}</small>
             </span>
           </Link>
         ))}
       </nav>
-      <Link className="sidebar-back" href="/select-loan-application">Choose from overview</Link>
+      <Link className="sidebar-back" href="/">Back to introduction</Link>
     </aside>
   );
 }

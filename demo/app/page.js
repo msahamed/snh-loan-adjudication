@@ -34,7 +34,7 @@ export default function Home() {
           </p>
           <p>The report, source code, trained adapter, and synthetic dataset are linked below.</p>
           <div className="welcome-actions">
-            <Link className="primary-action" href="/select-loan-application">Begin walkthrough</Link>
+            <Link className="primary-action" href="/application-flow/approve">Begin walkthrough</Link>
             <a className="secondary-action" href={projectLinks.github} target="_blank" rel="noreferrer">View GitHub</a>
           </div>
           <nav className="resource-links" aria-label="Project resources">

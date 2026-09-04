@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function LegacyApplicationRoute() {
-  redirect("/select-loan-application");
+  redirect("/application-flow/approve");
 }
