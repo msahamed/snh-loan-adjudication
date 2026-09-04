@@ -1,0 +1,34 @@
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{framed}
+\usepackage{needspace}
+\definecolor{SNHInk}{HTML}{18201E}
+\definecolor{SNHTeal}{HTML}{0F766E}
+\definecolor{SNHMuted}{HTML}{68736F}
+\definecolor{shadecolor}{HTML}{EEF4F1}
+\setmainfont{Avenir Next}
+\setsansfont{Avenir Next}
+\setmonofont{Menlo}
+\titleformat{\section}{\fontsize{20}{24}\selectfont\bfseries\color{SNHInk}}{}{0pt}{}
+\titleformat{\subsection}{\Needspace{12\baselineskip}\fontsize{14}{17}\selectfont\bfseries\color{SNHTeal}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{0pt}{11pt}
+\titlespacing*{\subsection}{0pt}{18pt}{7pt}
+\setlist[itemize]{leftmargin=17pt,itemsep=3pt,topsep=5pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize\color{SNHMuted}AI Loan Adjudication}
+\rhead{\footnotesize\color{SNHMuted}Sabber Ahamed}
+\cfoot{\footnotesize\color{SNHMuted}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\hypersetup{colorlinks=true,linkcolor=SNHTeal,urlcolor=SNHTeal,citecolor=SNHTeal}
+\AtBeginEnvironment{longtable}{\footnotesize}
+\renewenvironment{Shaded}
+  {\begin{center}\begin{minipage}{0.88\linewidth}\begin{snugshade}\footnotesize}
+  {\end{snugshade}\end{minipage}\end{center}}
+\raggedbottom
