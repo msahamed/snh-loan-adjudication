@@ -319,14 +319,6 @@ export default function Application() {
     <main className="application-shell">
       <AppHeader />
 
-      <section className="intro">
-        <div>
-          <h1>Loan adjudication walkthrough</h1>
-          <p className="subtitle">Follow one application from customer dialogue to a policy-verified decision.</p>
-        </div>
-        <Link className="text-action" href="/">Read introduction</Link>
-      </section>
-
       <section className={`workspace ${stage === 0 ? "pre-assessment" : "processing"}`}>
         <aside className="case-sidebar">
           <div className="sidebar-head">

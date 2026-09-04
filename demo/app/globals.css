@@ -42,7 +42,6 @@ main {
 }
 
 .application-shell > .topbar,
-.application-shell > .intro,
 .application-shell > footer { flex: 0 0 auto; }
 
 button, input, select { font: inherit; }
@@ -84,21 +83,8 @@ button { cursor: pointer; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #5cd19a; }
 .divider { width: 1px; height: 16px; margin: 0 4px; background: #43506a; }
 
-.intro {
-  padding: 24px 32px 22px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  background: white;
-  border-bottom: 1px solid var(--line);
-}
-
 .panel-label { margin: 0 0 4px; color: var(--muted); font-size: 11px; font-weight: 600; }
 h1 { max-width: 680px; margin: 0; font-size: clamp(24px, 2.4vw, 32px); font-weight: 750; letter-spacing: -.025em; }
-.subtitle { max-width: 700px; margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
-.text-action { padding: 8px 0; flex: 0 0 auto; color: var(--blue); background: transparent; border: 0; font-size: 12px; font-weight: 700; }
-.text-action:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .scenario-dot { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; }
 .scenario-dot.green { background: var(--green); }
@@ -261,7 +247,6 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
   main { min-height: 100vh; border: 0; }
   .topbar { height: 62px; padding: 0 18px; }
   .header-status .divider, .header-status .ruleset { display: none; }
-  .intro { padding: 25px 18px 20px; }
   .workspace { display: block; }
   .application-shell .workspace { display: grid; grid-template-columns: 142px minmax(0, 1fr); }
   .sidebar-head { padding: 15px 10px 12px; }
