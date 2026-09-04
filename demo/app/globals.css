@@ -73,11 +73,7 @@ button { cursor: pointer; }
 .divider { width: 1px; height: 16px; margin: 0 4px; background: #43506a; }
 
 .intro {
-  padding: 28px 32px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
+  padding: 24px 32px 22px;
   background: white;
   border-bottom: 1px solid var(--line);
 }
@@ -86,33 +82,11 @@ button { cursor: pointer; }
 h1 { max-width: 680px; margin: 0; font-size: clamp(24px, 2.4vw, 32px); font-weight: 750; letter-spacing: -.025em; }
 .subtitle { max-width: 700px; margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 
-.scenario-picker { display: flex; min-width: 510px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.scenario {
-  min-width: 0;
-  padding: 11px 13px;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  text-align: left;
-  color: var(--ink);
-  background: white;
-  border: 0;
-  border-right: 1px solid var(--line);
-  border-radius: 0;
-  transition: .18s ease;
-}
-.scenario:last-child { border-right: 0; }
-.scenario:hover { background: #f4f6f5; }
-.scenario.active { background: #e8f1ee; box-shadow: inset 0 -2px 0 var(--blue); }
 .scenario-dot { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; }
 .scenario-dot.green { background: var(--green); }
 .scenario-dot.red { background: var(--red); }
 .scenario-dot.amber { background: #d08a23; }
 .scenario-dot.blue { background: var(--blue); }
-.scenario span:nth-child(2) { display: flex; flex-direction: column; gap: 1px; }
-.scenario b { font-size: 13px; }
-.scenario small { color: var(--muted); font-size: 11px; }
 
 .workspace { min-height: 740px; display: grid; grid-template-columns: minmax(360px, 41%) minmax(560px, 59%); }
 .chat-panel, .trace-panel { min-width: 0; background: white; }
@@ -124,7 +98,15 @@ h1 { max-width: 680px; margin: 0; font-size: clamp(24px, 2.4vw, 32px); font-weig
 .secure-label, .case-id { color: var(--muted); font-size: 11px; }
 .secure-label::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--green); }
 
-.chat-body { flex: 1; min-height: 580px; padding: 24px 24px 32px; overflow-y: auto; background: #fafbfa; }
+.case-selector { padding: 16px 24px; background: white; border-bottom: 1px solid var(--line); }
+.case-selector label { display: block; margin-bottom: 7px; color: var(--ink); font-size: 12px; font-weight: 700; }
+.case-select-row { position: relative; display: flex; align-items: center; }
+.case-select-row .scenario-dot { position: absolute; left: 12px; z-index: 1; }
+.case-selector select { width: 100%; height: 42px; padding: 0 38px 0 30px; color: var(--ink); background: #f7f8f7; border: 1px solid #cfd6d2; border-radius: 6px; font-size: 13px; font-weight: 650; appearance: auto; }
+.case-selector select:focus { outline: 2px solid #9bc5bc; outline-offset: 1px; border-color: var(--blue); }
+.case-selector p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+
+.chat-body { flex: 1; min-height: 500px; padding: 24px 24px 32px; overflow-y: auto; background: #fafbfa; }
 .chat-date { margin-bottom: 20px; color: #9aa3b3; font-size: 11px; text-align: center; }
 .message-row { margin: 0 0 15px; display: flex; align-items: flex-end; gap: 8px; }
 .message-row.user { justify-content: flex-end; }
@@ -215,8 +197,6 @@ footer { height: 48px; padding: 0 32px; display: flex; align-items: center; just
 
 @media (max-width: 1120px) {
   body { padding: 0 16px; }
-  .intro { align-items: flex-start; flex-direction: column; }
-  .scenario-picker { width: 100%; min-width: 0; }
   .workspace { grid-template-columns: 1fr; }
   .chat-panel { border-right: 0; border-bottom: 1px solid var(--line); }
   .trace-panel { min-height: 760px; }
@@ -228,12 +208,9 @@ footer { height: 48px; padding: 0 32px; display: flex; align-items: center; just
   .topbar { height: 62px; padding: 0 18px; }
   .header-status .divider, .header-status .ruleset { display: none; }
   .intro { padding: 25px 18px 20px; }
-  .scenario-picker { display: grid; grid-template-columns: 1fr 1fr; }
-  .scenario { padding: 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .scenario:nth-child(2n) { border-right: 0; }
-  .scenario:nth-last-child(-n+2) { border-bottom: 0; }
   .workspace { display: block; }
   .panel-head { padding: 0 18px; }
+  .case-selector { padding: 15px 18px; }
   .chat-body { padding: 20px 16px 26px; }
   .message { max-width: 84%; }
   .trace-body { padding: 20px 16px 30px; }

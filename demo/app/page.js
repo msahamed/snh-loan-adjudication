@@ -309,21 +309,7 @@ export default function Home() {
       <section className="intro">
         <div>
           <h1>Loan adjudication walkthrough</h1>
-          <p className="subtitle">Choose a case, then follow the customer dialogue through model extraction, policy verification, and final routing.</p>
-        </div>
-        <div className="scenario-picker" aria-label="Example scenarios">
-          {examples.map((item) => (
-            <button
-              className={selectedId === item.id ? "scenario active" : "scenario"}
-              key={item.id}
-              type="button"
-              aria-pressed={selectedId === item.id}
-              onClick={() => chooseExample(item.id)}
-            >
-              <span className={`scenario-dot ${item.accent}`} />
-              <span><b>{item.short}</b><small>{item.title}</small></span>
-            </button>
-          ))}
+          <p className="subtitle">Follow a customer dialogue through model extraction, policy verification, and final routing.</p>
         </div>
       </section>
 
@@ -335,6 +321,23 @@ export default function Home() {
               <h2>Application assistant</h2>
             </div>
             <span className="secure-label">Secure session</span>
+          </div>
+
+          <div className="case-selector">
+            <label htmlFor="demo-case">Example case</label>
+            <div className="case-select-row">
+              <span className={`scenario-dot ${example.accent}`} />
+              <select
+                id="demo-case"
+                value={selectedId}
+                onChange={(event) => chooseExample(event.target.value)}
+              >
+                {examples.map((item) => (
+                  <option value={item.id} key={item.id}>{item.short} · {item.title}</option>
+                ))}
+              </select>
+            </div>
+            <p>{example.description}</p>
           </div>
 
           <div className="chat-body">
