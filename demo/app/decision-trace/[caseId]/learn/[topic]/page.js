@@ -295,13 +295,24 @@ export default async function LearnDecisionStep({ params }) {
           </section>
 
           {topic === "extracted-application" && (
-            <section className="extraction-json" aria-labelledby="extraction-json-title">
+            <section className="learn-json" aria-labelledby="extraction-json-title">
               <div>
                 <p className="panel-label">Actual output</p>
                 <h2 id="extraction-json-title">Structured application JSON</h2>
                 <p>This flat object passes directly to schema validation and the deterministic policy engine.</p>
               </div>
               <pre><code>{JSON.stringify(example.application, null, 2)}</code></pre>
+            </section>
+          )}
+
+          {topic === "model-output" && (
+            <section className="learn-json" aria-labelledby="model-json-title">
+              <div>
+                <p className="panel-label">Actual output</p>
+                <h2 id="model-json-title">Complete model JSON</h2>
+                <p>The decision, citations, and explanation remain shadow outputs until the policy engine verifies them.</p>
+              </div>
+              <pre><code>{JSON.stringify({ ...example.application, ...example.model }, null, 2)}</code></pre>
             </section>
           )}
 
