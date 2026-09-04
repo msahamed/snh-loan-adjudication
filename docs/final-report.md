@@ -4,7 +4,7 @@
 
 ## Objective
 
-I treated this project as an MVP for near-real-time, customer-facing loan adjudication. It converts a loan conversation into **Approve, Reject, Human review,** or **Needs information** and explains the outcome using the supplied rules. I also created a [Vercel demo UI](https://demo-9cb6fwxx8-msahameds-projects.vercel.app/) for an intuitive walkthrough.
+I treated this project as an MVP for near-real-time, customer-facing loan adjudication. It converts a loan conversation into **Approve, Reject, Human review,** or **Needs information** and explains the outcome using the supplied rules. I also created a [Vercel demo UI](https://demo-bice-mu-32.vercel.app) for an intuitive walkthrough.
 
 ## [System design](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md)
 
