@@ -83,7 +83,11 @@ export default async function DecisionTrace({ params }) {
             </div>
 
             <section className="audit-section">
-              <div className="audit-heading"><span>01</span><div><h2>Extracted application</h2><p>Structured values parsed from the conversation.</p></div></div>
+              <div className="audit-heading">
+                <span>01</span>
+                <div><h2>Extracted application</h2><p>Structured values parsed from the conversation.</p></div>
+                <Link className="learn-link" href={`/decision-trace/${caseId}/learn/extracted-application`}>Learn how this works →</Link>
+              </div>
               <div className="field-grid">
                 {fields.map(([field, label]) => (
                   <div className={example.application[field] === null ? "field-item missing-field" : "field-item"} key={field}>
@@ -94,7 +98,11 @@ export default async function DecisionTrace({ params }) {
             </section>
 
             <section className="audit-section">
-              <div className="audit-heading"><span>02</span><div><h2>Model output</h2><p>Useful for interpretation, but not trusted as the final decision.</p></div></div>
+              <div className="audit-heading">
+                <span>02</span>
+                <div><h2>Model output</h2><p>Useful for interpretation, but not trusted as the final decision.</p></div>
+                <Link className="learn-link" href={`/decision-trace/${caseId}/learn/model-output`}>Learn how this works →</Link>
+              </div>
               <div className="shadow-output">
                 <div className="shadow-row">
                   <div><span>Shadow decision</span><DecisionPill decision={example.model.decision} /></div>
@@ -106,7 +114,11 @@ export default async function DecisionTrace({ params }) {
             </section>
 
             <section className="audit-section">
-              <div className="audit-heading"><span>03</span><div><h2>Deterministic verification</h2><p>The engine recalculates every active rule from the extracted values.</p></div></div>
+              <div className="audit-heading">
+                <span>03</span>
+                <div><h2>Deterministic verification</h2><p>The engine recalculates every active rule from the extracted values.</p></div>
+                <Link className="learn-link" href={`/decision-trace/${caseId}/learn/deterministic-verification`}>Learn how this works →</Link>
+              </div>
               <div className="verification-summary">
                 <div><strong>{engine.checks.filter((check) => check.passed === true).length}</strong><span>Passed</span></div>
                 <div><strong>{exceptions.length}</strong><span>Exceptions</span></div>
@@ -146,7 +158,11 @@ export default async function DecisionTrace({ params }) {
             </section>
 
             <section className="audit-section final-response-section">
-              <div className="audit-heading"><span>04</span><div><h2>Customer response</h2><p>Generated only from the verified decision and rule citations.</p></div></div>
+              <div className="audit-heading">
+                <span>04</span>
+                <div><h2>Customer response</h2><p>Generated only from the verified decision and rule citations.</p></div>
+                <Link className="learn-link" href={`/decision-trace/${caseId}/learn/customer-response`}>Learn how this works →</Link>
+              </div>
               <div className={`customer-response ${meta.tone}`}>
                 <DecisionPill decision={engine.decision} />
                 <h3>{meta.customer}</h3>
