@@ -327,23 +327,35 @@ export default function Application() {
         <Link className="text-action" href="/">Read introduction</Link>
       </section>
 
-      <nav className="case-switcher" aria-label="Sample applications">
-        <span className="case-switcher-label">Choose a case</span>
-        {examples.map((item) => (
-          <button
-            type="button"
-            key={item.id}
-            className={selectedId === item.id ? "case-tab active" : "case-tab"}
-            aria-current={selectedId === item.id ? "true" : undefined}
-            onClick={() => chooseExample(item.id)}
-          >
-            <span className={`scenario-dot ${item.accent}`} />
-            <span><b>{item.short}</b><small>{item.title}</small></span>
-          </button>
-        ))}
-      </nav>
-
       <section className={`workspace ${stage === 0 ? "pre-assessment" : "processing"}`}>
+        <aside className="case-sidebar">
+          <div className="sidebar-head">
+            <p className="panel-label">Test conversations</p>
+            <h2>Applications</h2>
+          </div>
+          <nav className="case-list" aria-label="Sample applications">
+            {examples.map((item) => (
+              <button
+                type="button"
+                key={item.id}
+                className={selectedId === item.id ? "case-item active" : "case-item"}
+                aria-current={selectedId === item.id ? "true" : undefined}
+                onClick={() => chooseExample(item.id)}
+              >
+                <span className={`scenario-dot ${item.accent}`} />
+                <span>
+                  <b>{item.short}</b>
+                  <small>{item.title}</small>
+                </span>
+              </button>
+            ))}
+          </nav>
+          <div className="sidebar-note">
+            <span>Selected case</span>
+            <p>{example.description}</p>
+          </div>
+        </aside>
+
         <article className="chat-panel">
           <div className="panel-head">
             <div>
