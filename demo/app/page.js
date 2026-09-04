@@ -33,6 +33,7 @@ export default function Home() {
             I built this walkthrough to show how a customer conversation becomes a loan decision. Choose a sample application, follow the dialogue, then see how the model and deterministic rules engine produce the final customer response.
           </p>
           <p>The report, source code, trained adapter, and synthetic dataset are linked below.</p>
+          <p className="author-credit"><span>Prepared by</span><strong>Sabber Ahamed</strong></p>
           <div className="welcome-actions">
             <Link className="primary-action" href="/application-flow/approve">Begin walkthrough</Link>
             <a className="secondary-action" href={projectLinks.github} target="_blank" rel="noreferrer">View GitHub</a>
