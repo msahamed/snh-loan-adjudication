@@ -48,6 +48,7 @@ Abbreviated training-target example (remaining extracted fields omitted):
 }
 ```
 
+\newpage
 
 ### Training setup
 
@@ -92,7 +93,3 @@ The model made three Test-1 decision errors. Recalculating the decisions with th
 ## Experiment takeaway
 
 The experiment shows that a small model can handle the conversation while deterministic code keeps lending decisions inspectable. The same design supports new client rules without training a separate model for each client.
-
-### Next iteration
-
-- Ground fields in dialogue evidence, detect conflicts, add audit logs, and test with client data.
