@@ -305,27 +305,6 @@ function Welcome({ onBegin }) {
           </nav>
         </div>
 
-        <div className="welcome-flow" aria-label="How the system processes an application">
-          <div className="flow-row">
-            <span>Customer dialogue</span>
-            <p>Natural, incomplete, or corrected answers</p>
-          </div>
-          <div className="flow-connector" />
-          <div className="flow-row">
-            <span>Model interpretation</span>
-            <p>Ten fields and an untrusted shadow decision</p>
-          </div>
-          <div className="flow-connector" />
-          <div className="flow-row emphasized">
-            <span>Policy verification</span>
-            <p>Every active rule is recalculated in code</p>
-          </div>
-          <div className="flow-connector" />
-          <div className="flow-row">
-            <span>Customer outcome</span>
-            <p>Approve, reject, review, or request information</p>
-          </div>
-        </div>
       </section>
       <footer>
         <span>Technical exercise prepared for SNH AI</span>
