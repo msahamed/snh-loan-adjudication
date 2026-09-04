@@ -239,6 +239,12 @@ const decisionMeta = {
   COLLECTING_INFORMATION: { label: "Continue", route: "Return to chatbot", tone: "blue", customer: "I need a little more information before assessing your application." },
 };
 
+const projectLinks = {
+  github: "https://github.com/msahamed/snh-loan-adjudication",
+  model: "https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora",
+  dataset: "https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic",
+};
+
 function DecisionPill({ decision }) {
   const meta = decisionMeta[decision];
   return <span className={`decision-pill ${meta.tone}`}>{meta.label}</span>;
@@ -256,7 +262,81 @@ function StepHeader({ number, title, state, children }) {
   );
 }
 
+function AppHeader({ onIntroduction }) {
+  return (
+    <header className="topbar">
+      <button className="brand" type="button" onClick={onIntroduction} aria-label="Return to introduction">
+        <span className="brand-mark">S</span>
+        <span className="brand-copy">
+          <strong>SNH AI</strong>
+          <span>Loan decision lab</span>
+        </span>
+      </button>
+      <div className="header-status">
+        <span className="live-dot" />
+        <span>Simulated inference</span>
+        <span className="divider" />
+        <span className="ruleset">Ruleset v1.0</span>
+      </div>
+    </header>
+  );
+}
+
+function Welcome({ onBegin }) {
+  return (
+    <main>
+      <AppHeader />
+      <section className="welcome">
+        <div className="welcome-copy">
+          <p className="recipient">A note for Shams</p>
+          <h1>Hi Shams, thanks for the opportunity to work through this exercise.</h1>
+          <p>
+            I built this walkthrough to show how a customer conversation becomes a loan decision. Choose a sample application, follow the dialogue, then see how the model and deterministic rules engine produce the final customer response.
+          </p>
+          <p>The report, source code, trained adapter, and synthetic dataset are linked below.</p>
+          <div className="welcome-actions">
+            <button type="button" className="primary-action" onClick={onBegin}>Begin walkthrough</button>
+            <a className="secondary-action" href={projectLinks.github} target="_blank" rel="noreferrer">View GitHub</a>
+          </div>
+          <nav className="resource-links" aria-label="Project resources">
+            <a href="https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/final-report.md" target="_blank" rel="noreferrer">Final report</a>
+            <a href={projectLinks.model} target="_blank" rel="noreferrer">Model adapter</a>
+            <a href={projectLinks.dataset} target="_blank" rel="noreferrer">Dataset</a>
+          </nav>
+        </div>
+
+        <div className="welcome-flow" aria-label="How the system processes an application">
+          <div className="flow-row">
+            <span>Customer dialogue</span>
+            <p>Natural, incomplete, or corrected answers</p>
+          </div>
+          <div className="flow-connector" />
+          <div className="flow-row">
+            <span>Model interpretation</span>
+            <p>Ten fields and an untrusted shadow decision</p>
+          </div>
+          <div className="flow-connector" />
+          <div className="flow-row emphasized">
+            <span>Policy verification</span>
+            <p>Every active rule is recalculated in code</p>
+          </div>
+          <div className="flow-connector" />
+          <div className="flow-row">
+            <span>Customer outcome</span>
+            <p>Approve, reject, review, or request information</p>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <span>Technical exercise prepared for SNH AI</span>
+        <span>Final decisions come from the policy engine</span>
+      </footer>
+    </main>
+  );
+}
+
 export default function Home() {
+  const [started, setStarted] = useState(false);
   const [selectedId, setSelectedId] = useState("reject");
   const [stage, setStage] = useState(0);
   const timers = useRef([]);
@@ -288,32 +368,50 @@ export default function Home() {
 
   const modelJson = JSON.stringify({ ...example.application, ...example.model }, null, 2);
 
+  if (!started) return <Welcome onBegin={() => setStarted(true)} />;
+
   return (
     <main>
-      <header className="topbar">
-        <div className="brand">
-          <span className="brand-mark">S</span>
-          <div>
-            <strong>SNH AI</strong>
-            <span>Loan decision lab</span>
-          </div>
-        </div>
-        <div className="header-status">
-          <span className="live-dot" />
-          <span>Simulated inference</span>
-          <span className="divider" />
-          <span className="ruleset">Ruleset v1.0</span>
-        </div>
-      </header>
+      <AppHeader onIntroduction={() => setStarted(false)} />
 
       <section className="intro">
         <div>
           <h1>Loan adjudication walkthrough</h1>
-          <p className="subtitle">Follow a customer dialogue through model extraction, policy verification, and final routing.</p>
+          <p className="subtitle">Select a saved conversation, process it, and inspect the final decision.</p>
         </div>
+        <button type="button" className="text-action" onClick={() => setStarted(false)}>Read introduction</button>
       </section>
 
-      <section className="workspace">
+      <section className={`workspace ${stage === 0 ? "pre-assessment" : "processing"}`}>
+        <aside className="case-sidebar">
+          <div className="sidebar-head">
+            <p className="panel-label">Sample applications</p>
+            <h2>Conversations</h2>
+            <p>Select a case to see how the final route changes.</p>
+          </div>
+          <nav className="case-list" aria-label="Sample applications">
+            {examples.map((item) => (
+              <button
+                type="button"
+                key={item.id}
+                className={selectedId === item.id ? "case-item active" : "case-item"}
+                aria-current={selectedId === item.id ? "true" : undefined}
+                onClick={() => chooseExample(item.id)}
+              >
+                <span className={`scenario-dot ${item.accent}`} />
+                <span>
+                  <b>{item.short}</b>
+                  <small>{item.title}</small>
+                </span>
+              </button>
+            ))}
+          </nav>
+          <div className="sidebar-note">
+            <span>Selected case</span>
+            <p>{example.description}</p>
+          </div>
+        </aside>
+
         <article className="chat-panel">
           <div className="panel-head">
             <div>
@@ -321,23 +419,6 @@ export default function Home() {
               <h2>Application assistant</h2>
             </div>
             <span className="secure-label">Secure session</span>
-          </div>
-
-          <div className="case-selector">
-            <label htmlFor="demo-case">Example case</label>
-            <div className="case-select-row">
-              <span className={`scenario-dot ${example.accent}`} />
-              <select
-                id="demo-case"
-                value={selectedId}
-                onChange={(event) => chooseExample(event.target.value)}
-              >
-                {examples.map((item) => (
-                  <option value={item.id} key={item.id}>{item.short} · {item.title}</option>
-                ))}
-              </select>
-            </div>
-            <p>{example.description}</p>
           </div>
 
           <div className="chat-body">
@@ -363,7 +444,7 @@ export default function Home() {
           <div className="chat-composer">
             <input aria-label="Message" disabled value={stage === 4 ? "Assessment complete" : "Example conversation complete"} readOnly />
             <button type="button" onClick={runAssessment} disabled={stage > 0 && stage < 4}>
-              {stage > 0 && stage < 4 ? "Assessing…" : stage === 4 ? "Run again" : "Run assessment"}
+              {stage > 0 && stage < 4 ? "Processing…" : stage === 4 ? "Process again" : "Process application"}
             </button>
           </div>
         </article>
@@ -395,7 +476,15 @@ export default function Home() {
               {stage >= 2 && (
                 <div className="model-box">
                   <div className="box-bar"><DecisionPill decision={example.model.decision} /><span>Valid JSON</span></div>
-                  <pre>{modelJson}</pre>
+                  <div className="model-summary">
+                    <span>Proposed citations</span>
+                    <strong>{example.model.failed_rule_ids.length ? example.model.failed_rule_ids.join(", ") : "None"}</strong>
+                    <p>{example.model.explanation}</p>
+                  </div>
+                  <details>
+                    <summary>View complete model JSON</summary>
+                    <pre>{modelJson}</pre>
+                  </details>
                 </div>
               )}
             </section>
@@ -458,7 +547,7 @@ export default function Home() {
 
       <footer>
         <span>Demo uses representative simulated outputs</span>
-        <span>Model decisions are never customer-authoritative</span>
+        <a href={projectLinks.github} target="_blank" rel="noreferrer">Source and report on GitHub</a>
       </footer>
     </main>
   );
