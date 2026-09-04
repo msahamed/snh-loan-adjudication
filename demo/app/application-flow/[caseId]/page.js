@@ -51,8 +51,8 @@ export default async function ApplicationFlow({ params }) {
               <span className="ready-dot" />
               <span>{captured === 10 ? "Conversation complete" : "Information still missing"}</span>
             </div>
-            <Link className="primary-action" href={`/decision-trace/${caseId}`}>
-              Process application
+            <Link className="primary-action decision-cta" href={`/decision-trace/${caseId}`}>
+              See how this conversation becomes an adjudication decision
               <span aria-hidden="true">→</span>
             </Link>
           </div>

@@ -257,6 +257,24 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .conversation-actionbar { min-height: 72px; padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; background: white; border-top: 1px solid var(--line); }
 .conversation-actionbar > div { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
 .conversation-actionbar .primary-action { gap: 9px; }
+.conversation-actionbar .decision-cta {
+  min-height: 48px;
+  padding: 0 22px;
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 5px 16px rgba(15, 118, 110, .24);
+  font-size: 14px;
+  transition: background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.conversation-actionbar .decision-cta:hover {
+  background: #0b625c;
+  box-shadow: 0 7px 20px rgba(15, 118, 110, .3);
+  transform: translateY(-1px);
+}
+.conversation-actionbar .decision-cta:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, .28);
+  outline-offset: 3px;
+}
 .ready-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
 
 .decision-layout { min-height: 0; flex: 1 1 auto; display: grid; grid-template-columns: 290px minmax(0, 1fr); overflow: hidden; background: #f6f8f7; }
