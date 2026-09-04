@@ -412,6 +412,13 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .visual-example { min-width: 760px; padding: 12px 18px; display: flex; align-items: center; gap: 14px; color: #40504a; background: #f7f9f8; border-top: 1px solid #ced8d3; }
 .visual-example span { flex: 0 0 auto; color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
 .visual-example strong { font-size: 12px; font-weight: 650; }
+.extraction-json { margin-top: 18px; display: grid; grid-template-columns: 250px minmax(0, 1fr); background: #17211f; border-radius: 8px; overflow: hidden; }
+.extraction-json > div { padding: 24px; border-right: 1px solid #35433f; }
+.extraction-json .panel-label { color: #8fa39b; }
+.extraction-json h2 { margin: 5px 0 0; color: #eef4f1; font-size: 18px; }
+.extraction-json > div > p:last-child { margin: 12px 0 0; color: #aab9b3; font-size: 12px; line-height: 1.55; }
+.extraction-json pre { max-height: 390px; margin: 0; padding: 24px 26px; overflow: auto; color: #cfe0d9; font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.extraction-json code { font: inherit; }
 .learn-explanation { margin-top: 18px; padding: 25px 26px; display: grid; grid-template-columns: 230px 1fr; gap: 34px; background: white; border: 1px solid var(--line); border-radius: 8px; }
 .learn-explanation h2, .resource-heading h2 { margin: 4px 0 0; font-size: 18px; }
 .learn-explanation > p { margin: 0; color: #4e5b56; font-size: 14px; line-height: 1.65; }
@@ -497,6 +504,8 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .learn-heading h1 { font-size: 32px; }
   .learn-heading > p:last-child { font-size: 15px; }
   .learn-explanation { padding: 20px; grid-template-columns: 1fr; gap: 14px; }
+  .extraction-json { grid-template-columns: 1fr; }
+  .extraction-json > div { border-right: 0; border-bottom: 1px solid #35433f; }
   .resource-section { padding: 20px; }
   .resource-card-list { grid-template-columns: 1fr; }
   .chat-panel { border-right: 0; }

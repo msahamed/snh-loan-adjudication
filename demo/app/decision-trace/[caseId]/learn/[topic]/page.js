@@ -294,6 +294,17 @@ export default async function LearnDecisionStep({ params }) {
             <div className="visual-example"><span>This application</span><strong>{exampleCaption(topic, example, engine)}</strong></div>
           </section>
 
+          {topic === "extracted-application" && (
+            <section className="extraction-json" aria-labelledby="extraction-json-title">
+              <div>
+                <p className="panel-label">Actual output</p>
+                <h2 id="extraction-json-title">Structured application JSON</h2>
+                <p>This flat object passes directly to schema validation and the deterministic policy engine.</p>
+              </div>
+              <pre><code>{JSON.stringify(example.application, null, 2)}</code></pre>
+            </section>
+          )}
+
           <section className="learn-explanation">
             <div>
               <p className="panel-label">Why this step exists</p>
