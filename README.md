@@ -21,7 +21,8 @@ npm run dev
 
 ## Evaluation
 
-- [Final two-page report](docs/final-report.md)
+- [Final two-page report (PDF)](final-report.pdf)
+- [Final report source](docs/final-report.md)
 - [Model and deterministic metrics](docs/evaluation-metrics.md)
 - [Nine representative model and deterministic outputs](docs/representative-outputs.md)
 - Machine-readable results: [`evaluation/metrics.json`](evaluation/metrics.json) and [`evaluation/representative-outputs.json`](evaluation/representative-outputs.json)
