@@ -9,6 +9,16 @@ Current status: trained Qwen3-1.7B QLoRA adapter, deterministic verification lay
 - [Qwen3-1.7B LoRA adapter](https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora)
 - [Synthetic training and evaluation datasets](https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic)
 
+## Founder demo
+
+The [Next.js UI](demo/README.md) presents the customer conversation beside the internal model-to-rules decision trace. It currently uses representative simulated outputs and is ready for a Hugging Face inference endpoint.
+
+```bash
+cd demo
+npm install
+npm run dev
+```
+
 ## Evaluation
 
 - [Final two-page report](docs/final-report.md)
