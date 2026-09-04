@@ -6,7 +6,7 @@
 
 I treated this project as an MVP for near-real-time, customer-facing loan adjudication. It converts a loan conversation into **Approve, Reject, Human review,** or **Needs information** and explains the outcome using the supplied rules. I also created a [Vercel demo UI](https://demo-bice-mu-32.vercel.app) for an intuitive walkthrough.
 
-## System design [[more details](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md)]
+## System design \moredetails{https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md}
 
 I used a hybrid design that combines an LLM with deterministic rules to improve pipeline reliability and support regulatory requirements. The model remains rule-agnostic, so updated rules can be supplied without additional fine-tuning.
 
@@ -24,7 +24,7 @@ I used a hybrid design that combines an LLM with deterministic rules to improve 
 
 The fine-tuned model produces a shadow loan decision and a short explanation for evaluation. The rules engine is authoritative: it makes the final decision from the extracted fields and active rules, then compares its result with the model's shadow decision.
 
-## Model and training [[more details](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/fine-tuning.md)]
+## Model and training \moredetails{https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/fine-tuning.md}
 
 ### Data
 

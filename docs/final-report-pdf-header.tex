@@ -8,6 +8,7 @@
 \usepackage{needspace}
 \definecolor{SNHInk}{HTML}{18201E}
 \definecolor{SNHTeal}{HTML}{0F766E}
+\definecolor{SNHLinkBlue}{HTML}{1A73E8}
 \definecolor{SNHMuted}{HTML}{68736F}
 \definecolor{shadecolor}{HTML}{EEF4F1}
 \setmainfont{Avenir Next}
@@ -28,8 +29,9 @@
 \rhead{\footnotesize\color{SNHMuted}Sabber Ahamed}
 \cfoot{\footnotesize\color{SNHMuted}\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
-\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=SNHTeal,urlcolor=SNHTeal,citecolor=SNHTeal}}
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=SNHLinkBlue,urlcolor=SNHLinkBlue,citecolor=SNHLinkBlue}}
 \let\SNHOriginalHref\href
-\renewcommand{\href}[2]{\SNHOriginalHref{#1}{\textcolor{SNHTeal}{#2}}}
+\renewcommand{\href}[2]{\SNHOriginalHref{#1}{\textcolor{SNHLinkBlue}{#2}}}
+\newcommand{\moredetails}[1]{\texorpdfstring{\hspace{0.25em}{\fontsize{9}{11}\selectfont\normalfont\color{SNHLinkBlue}[\SNHOriginalHref{#1}{more details}]}}{ [more details]}}
 \AtBeginEnvironment{longtable}{\footnotesize}
 \raggedbottom
