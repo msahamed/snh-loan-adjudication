@@ -4,7 +4,7 @@
 
 ## Objective
 
-I treated this project as an MVP for a near-real-time, customer-facing loan adjudication process. It uses a loan conversation to determine one of four outcomes: **Approve, Reject, Human review,** or **Needs information**, with a clear reason based on the supplied lending rules.
+I treated this project as an MVP for near-real-time, customer-facing loan adjudication. It converts a loan conversation into **Approve, Reject, Human review,** or **Needs information** and explains the outcome using the supplied rules. I also created a [Vercel demo UI](https://demo-9cb6fwxx8-msahameds-projects.vercel.app/) for an intuitive walkthrough.
 
 ## [System design](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md)
 
@@ -51,11 +51,9 @@ Abbreviated training-target example (remaining extracted fields omitted):
 
 ### Training setup
 
-- Qwen's native chat template and special tokens
-- 2,048-token limit; longest example was 1,582 tokens
+- Qwen's native chat template, with a 2,048-token limit; the longest example was 1,582 tokens
 - Dynamic padding and loss only on assistant-response tokens
-- QLoRA for two epochs and 250 steps
-- Final adapter size: about 84 MB
+- QLoRA for two epochs and 250 steps; final adapter size: about 84 MB
 
 I chose Qwen3-1.7B because this is a narrow JSON-output task. The small model and LoRA adapter are easier to serve and version; latency and cost still need production benchmarking.
 
