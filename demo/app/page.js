@@ -38,7 +38,7 @@ export default function Home() {
             <a className="secondary-action" href={projectLinks.github} target="_blank" rel="noreferrer">View GitHub</a>
           </div>
           <nav className="resource-links" aria-label="Project resources">
-            <a href={`${projectLinks.github}/blob/main/docs/final-report.md`} target="_blank" rel="noreferrer">Final report</a>
+            <a href={`${projectLinks.github}/blob/main/final-report.pdf`} target="_blank" rel="noreferrer">Final report</a>
             <a href={projectLinks.model} target="_blank" rel="noreferrer">Model adapter</a>
             <a href={projectLinks.dataset} target="_blank" rel="noreferrer">Dataset</a>
           </nav>

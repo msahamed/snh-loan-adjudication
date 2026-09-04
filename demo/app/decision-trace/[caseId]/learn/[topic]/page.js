@@ -45,7 +45,7 @@ const topics = {
     resources: [
       { label: "Explanation and citation design", note: "What the customer sees and what the audit retains.", href: `${projectLinks.github}/blob/main/docs/system-design.md#explanations-and-citations` },
       { label: "Representative outputs", note: "Examples comparing model and verified results.", href: `${projectLinks.github}/blob/main/docs/representative-outputs.md` },
-      { label: "Why deterministic control matters", note: "Business and regulatory reasoning from the final report.", href: `${projectLinks.github}/blob/main/docs/final-report.md#why-deterministic-control-is-necessary-in-lending` },
+      { label: "Why deterministic control matters", note: "Business and regulatory reasoning from the final report.", href: `${projectLinks.github}/blob/main/final-report.pdf` },
     ],
   },
 };
