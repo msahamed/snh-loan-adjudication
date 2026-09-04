@@ -219,8 +219,6 @@ footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .welcome h1 { max-width: 670px; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; }
 .welcome-copy > p:not(.recipient) { max-width: 640px; margin: 20px 0 0; color: #4d5a55; font-size: 16px; line-height: 1.65; }
 .welcome-copy > p + p { margin-top: 10px; }
-.welcome-copy .author-credit { width: fit-content; margin: 24px auto 0; padding: 9px 13px; display: flex; align-items: center; gap: 8px; color: #53605b; background: #edf4f1; border-left: 3px solid var(--blue); font-size: 12px; }
-.author-credit strong { color: var(--ink); font-size: 14px; }
 .welcome-actions { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 .primary-action, .secondary-action { min-height: 44px; padding: 0 17px; display: inline-flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 13px; font-weight: 750; text-decoration: none; }
 .primary-action { color: white; background: var(--navy); border: 1px solid var(--navy); }
