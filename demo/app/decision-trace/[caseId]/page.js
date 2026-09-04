@@ -60,7 +60,7 @@ export default async function DecisionTrace({ params }) {
           <p>{example.description}</p>
           <dl>
             <div><dt>Model proposed</dt><dd>{decisionMeta[example.model.decision].label}</dd></div>
-            <div><dt>Policy engine</dt><dd>{meta.label}</dd></div>
+            <div><dt>Rules engine</dt><dd>{meta.label}</dd></div>
             <div><dt>Rules checked</dt><dd>{engine.checks.length}</dd></div>
             <div><dt>Exceptions</dt><dd>{exceptions.length}</dd></div>
           </dl>
@@ -78,7 +78,7 @@ export default async function DecisionTrace({ params }) {
             <div className="pipeline-strip" aria-label="Decision pipeline">
               <span>Customer dialogue</span><i>→</i>
               <span>Model output</span><i>→</i>
-              <span>Policy verification</span><i>→</i>
+              <span>Rule verification</span><i>→</i>
               <span className="active">Final outcome</span>
             </div>
 

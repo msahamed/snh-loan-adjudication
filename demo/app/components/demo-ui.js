@@ -81,7 +81,7 @@ export function DemoFooter() {
   return (
     <footer>
       <span>Representative simulated outputs</span>
-      <span>Final decisions come from the policy engine</span>
+      <span>Final decisions come from the rules engine</span>
     </footer>
   );
 }

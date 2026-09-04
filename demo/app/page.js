@@ -47,7 +47,7 @@ export default function Home() {
 
       <footer>
         <span>Technical exercise prepared for SNH AI</span>
-        <span>Final decisions come from the policy engine</span>
+        <span>Final decisions come from the rules engine</span>
       </footer>
     </main>
   );

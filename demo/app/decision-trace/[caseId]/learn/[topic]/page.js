@@ -28,7 +28,7 @@ const topics = {
   },
   "deterministic-verification": {
     step: "Step 3",
-    title: "How the policy engine verifies the result",
+    title: "How the deterministic rules engine verifies the result",
     summary: "Code evaluates every active rule again using the extracted values. Rejection takes priority over human review, and missing information prevents a lending decision.",
     why: "This makes thresholds, rule citations, and decisions reproducible. A client can also update the rules file without retraining the model. The engine cannot repair an incorrectly extracted value, so unresolved evidence must be blocked earlier.",
     resources: [
@@ -186,7 +186,7 @@ function StepVisualization({ topic, example, engine }) {
       <svg className="system-illustration" viewBox="0 0 920 300" role="img" aria-labelledby="rules-title rules-desc">
         <title id="rules-title">Deterministic rule verification</title>
         <desc id="rules-desc">Ten configured rules evaluate the extracted fields, then decision precedence produces the verified outcome.</desc>
-        <text className="viz-kicker" x="22" y="27">ACTIVE POLICY · 10 CHECKS</text>
+        <text className="viz-kicker" x="22" y="27">ACTIVE RULESET · 10 CHECKS</text>
         <line className="rule-bus" x1="172" y1="44" x2="172" y2="268" />
         {engine.checks.map((check, index) => {
           const y = 51 + index * 23;
@@ -226,7 +226,7 @@ function StepVisualization({ topic, example, engine }) {
       <desc id="response-desc">The verified decision and rule evidence pass through a citation gate before a customer explanation and audit record are created.</desc>
       <g className={`decision-source ${decisionMeta[engine.decision].tone}`}>
         <circle cx="105" cy="150" r="64" /><circle cx="105" cy="150" r="49" />
-        <text x="105" y="138" textAnchor="middle">POLICY</text><text x="105" y="158" textAnchor="middle">DECISION</text>
+        <text x="105" y="138" textAnchor="middle">RULES</text><text x="105" y="158" textAnchor="middle">DECISION</text>
         <text x="105" y="181" textAnchor="middle">{decisionMeta[engine.decision].label.toUpperCase()}</text>
       </g>
       <path className="viz-route" d="M169 132 C226 132 228 102 278 102 M169 168 C226 168 228 198 278 198" />
@@ -299,7 +299,7 @@ export default async function LearnDecisionStep({ params }) {
               <div>
                 <p className="panel-label">Actual output</p>
                 <h2 id="extraction-json-title">Structured application JSON</h2>
-                <p>This flat object passes directly to schema validation and the deterministic policy engine.</p>
+                <p>This flat object passes directly to schema validation and the deterministic rules engine.</p>
               </div>
               <pre><code>{JSON.stringify(example.application, null, 2)}</code></pre>
             </section>
@@ -310,9 +310,35 @@ export default async function LearnDecisionStep({ params }) {
               <div>
                 <p className="panel-label">Actual output</p>
                 <h2 id="model-json-title">Complete model JSON</h2>
-                <p>The decision, citations, and explanation remain shadow outputs until the policy engine verifies them.</p>
+                <p>The decision, citations, and explanation remain shadow outputs until the rules engine verifies them.</p>
               </div>
               <pre><code>{JSON.stringify({ ...example.application, ...example.model }, null, 2)}</code></pre>
+            </section>
+          )}
+
+          {topic === "deterministic-verification" && (
+            <section className="learn-json" aria-labelledby="rules-json-title">
+              <div>
+                <p className="panel-label">Actual output</p>
+                <h2 id="rules-json-title">Rules-engine verification JSON</h2>
+                <p>This auditable result replaces the model’s shadow decision and citations.</p>
+              </div>
+              <pre><code>{JSON.stringify({
+                ruleset_version: "1.0",
+                rules_evaluated: engine.checks.length,
+                decision: engine.decision,
+                failed_rule_ids: engine.failed_rule_ids,
+                explanation: engine.explanation,
+                rule_results: engine.checks.map((check) => ({
+                  rule_id: check.id,
+                  field: check.field,
+                  observed_value: example.application[check.field],
+                  operator: check.operator,
+                  configured_value: check.expected,
+                  action_on_fail: check.action,
+                  passed: check.passed,
+                })),
+              }, null, 2)}</code></pre>
             </section>
           )}
 
