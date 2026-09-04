@@ -9,7 +9,7 @@ import random
 from pathlib import Path
 from typing import Any
 
-from generate_data import adjudicate, load_rules
+from rules_engine import adjudicate, load_rules
 
 
 FIELD_ORDER = [

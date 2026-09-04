@@ -11,8 +11,8 @@ from pathlib import Path
 from typing import Any
 
 from build_dataset import FIELD_ORDER, make_profile, valid_profile, value_phrase
-from generate_data import adjudicate, load_rules
 from prepare_training_data import validate_record
+from rules_engine import adjudicate, load_rules
 
 
 SCENARIO_COUNTS = {

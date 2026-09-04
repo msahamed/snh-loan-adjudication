@@ -6,7 +6,7 @@
 
 I treated this project as an MVP for near-real-time, customer-facing loan adjudication. It converts a loan conversation into **Approve, Reject, Human review,** or **Needs information** and explains the outcome using the supplied rules. I also created a [Vercel demo UI](https://demo-bice-mu-32.vercel.app) for an intuitive walkthrough.
 
-## [System design](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md)
+## System design [[more details](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/system-design.md)]
 
 I used a hybrid design that combines an LLM with deterministic rules to improve pipeline reliability and support regulatory requirements. The model remains rule-agnostic, so updated rules can be supplied without additional fine-tuning.
 
@@ -24,7 +24,7 @@ I used a hybrid design that combines an LLM with deterministic rules to improve 
 
 The fine-tuned model produces a shadow loan decision and a short explanation for evaluation. The rules engine is authoritative: it makes the final decision from the extracted fields and active rules, then compares its result with the model's shadow decision.
 
-## [Model and training](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/fine-tuning.md)
+## Model and training [[more details](https://github.com/msahamed/snh-loan-adjudication/blob/main/docs/fine-tuning.md)]
 
 ### Data
 
@@ -52,6 +52,7 @@ Abbreviated training-target example (remaining extracted fields omitted):
 
 ### Training setup
 
+- I used one NVIDIA RTX 5090 with 32 GiB of VRAM for dataset-generation experiments and fine-tuning. The final two-epoch, 250-step training run took roughly 45 minutes.
 - Qwen's native chat template, with a 2,048-token limit; the longest example was 1,582 tokens
 - Dynamic padding and loss only on assistant-response tokens
 - QLoRA for two epochs and 250 steps; final adapter size: about 84 MB
@@ -92,4 +93,4 @@ The model made three Test-1 decision errors. Recalculating the decisions with th
 
 ## Experiment takeaway
 
-The experiment shows that a small model can handle the conversation while deterministic code keeps lending decisions inspectable. The same design supports new client rules without training a separate model for each client.
+I found that a small model can handle the conversation while deterministic code keeps lending decisions inspectable. The same design supports new client rules without training a separate model for each client.

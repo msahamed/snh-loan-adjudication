@@ -221,7 +221,9 @@ def markdown_report(metrics: dict[str, Any]) -> str:
     lines = [
         "# Evaluation Metrics",
         "",
-        "All metrics use generation-mode predictions from the final Qwen3-1.7B LoRA adapter. Model and deterministic results are reported separately.",
+        "**Sabber Ahamed · September 2026**",
+        "",
+        "I calculated these metrics from generation-mode predictions made by my final Qwen3-1.7B LoRA adapter. I report the model and deterministic results separately so their responsibilities remain clear.",
         "",
         "## Summary",
         "",

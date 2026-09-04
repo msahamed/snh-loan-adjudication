@@ -8,8 +8,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from generate_data import adjudicate
 from prepare_training_data import FIELDS, OUTPUT_KEYS, build_messages, validate_record
+from rules_engine import adjudicate
 
 
 def parse_json_object(text: str) -> dict[str, Any]:

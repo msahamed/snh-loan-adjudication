@@ -103,8 +103,9 @@ def markdown(examples: list[dict[str, Any]]) -> str:
     lines = [
         "# Representative Model and Deterministic Outputs",
         "",
-        "These examples are selected from generation-mode evaluation. The model output is parsed first; the deterministic layer then consumes the extracted fields and active rules.",
-        "The machine-readable artifact includes each model's complete 10-field extraction; this view keeps the adjudication output compact and flags extraction errors.",
+        "**Sabber Ahamed · September 2026**",
+        "",
+        "I selected these examples from generation-mode evaluation. I parse the model output first, then pass its extracted fields and the active rules to the deterministic layer. The [machine-readable artifact](../evaluation/representative-outputs.json) includes every 10-field extraction; I keep this page focused on the adjudication output and the most relevant extraction errors.",
     ]
     for index, example in enumerate(examples, start=1):
         context = example["scenario"]

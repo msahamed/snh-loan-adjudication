@@ -11,8 +11,8 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-from generate_data import adjudicate, field_key
 from prepare_training_data import FIELDS, validate_record
+from rules_engine import adjudicate, field_key
 
 
 RULESET_VERSION = "2.0-test"
