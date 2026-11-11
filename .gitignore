@@ -8,5 +8,5 @@ data/rejected-*.json
 reports/
 artifacts/
 models/
-LLM Coding Challenge for AI_ML Tech Lead1.pdf
-SNH.AI - AI-ML Engineer - Job Specification.pdf
+/*.pdf
+!/final-report.pdf

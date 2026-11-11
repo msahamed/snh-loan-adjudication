@@ -17,7 +17,7 @@ export function DemoHeader({ activeStep, caseId }) {
       <Link className="brand" href="/" aria-label="Return to introduction">
         <span className="brand-mark">S</span>
         <span className="brand-copy">
-          <strong>SNH AI</strong>
+          <strong>Sabber Ahamed</strong>
           <span>Loan decision lab</span>
         </span>
       </Link>

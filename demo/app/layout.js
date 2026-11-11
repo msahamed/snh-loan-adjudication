@@ -9,7 +9,7 @@ const hanken = localFont({
 });
 
 export const metadata = {
-  title: "SNH AI Loan Decision Demo",
+  title: "Loan Adjudication Lab",
   description: "Hybrid LLM and deterministic loan adjudication walkthrough",
 };
 

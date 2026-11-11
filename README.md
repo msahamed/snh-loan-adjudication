@@ -1,6 +1,6 @@
 # Auditable Loan Adjudication
 
-**Built by [Sabber Ahamed](https://github.com/msahamed) for the SNH AI/ML Technology Lead challenge.**
+**Built by [Sabber Ahamed](https://github.com/msahamed).**
 
 I built this MVP to show how I would turn a loan conversation into an explainable adjudication decision. I use a fine-tuned Qwen3-1.7B model to extract structured application data and produce a shadow decision. A deterministic rules engine then recalculates the authoritative result from the active policy.
 
@@ -21,7 +21,7 @@ The four outcomes are `APPROVE`, `REJECT`, `REVIEW`, and `COLLECTING_INFORMATION
 | Model adapter | [Download the Qwen3-1.7B LoRA adapter from Hugging Face](https://huggingface.co/sabber/snh-qwen3-1.7b-loan-adjudication-lora) |
 | Dataset | [Open the 6,000-record dataset on Hugging Face](https://huggingface.co/datasets/sabber/snh-loan-adjudication-synthetic) |
 | Supplied rules | [View the credit policy](credit_rules.json) |
-| Challenge brief | [View the problem statement](problem_statement.txt) |
+| Project scope | [View the problem statement](problem_statement.txt) |
 
 ## Why I used a hybrid design
 
@@ -64,7 +64,7 @@ credit_rules.json
 final-report.pdf
 ```
 
-Generated datasets, predictions, model weights, caches, and local challenge PDFs are intentionally excluded from Git. I publish the large model and dataset artifacts through Hugging Face instead.
+Generated datasets, predictions, model weights, caches, and local reference PDFs are intentionally excluded from Git. I publish the large model and dataset artifacts through Hugging Face instead.
 
 ## Run the demo
 
@@ -107,4 +107,4 @@ See the [model and training guide](docs/fine-tuning.md) for the baseline, QLoRA,
 
 ## Author
 
-I’m **Sabber Ahamed**. The architecture, synthetic-data pipeline, training experiment, evaluation, report, and interactive walkthrough in this repository are my work for this challenge.
+I’m **Sabber Ahamed**. The architecture, synthetic-data pipeline, training experiment, evaluation, report, and interactive walkthrough in this repository are my work.

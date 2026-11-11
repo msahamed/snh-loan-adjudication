@@ -6,17 +6,17 @@
 \usepackage{hyperref}
 \usepackage{framed}
 \usepackage{needspace}
-\definecolor{SNHInk}{HTML}{18201E}
-\definecolor{SNHTeal}{HTML}{0F766E}
-\definecolor{SNHLinkBlue}{HTML}{1A73E8}
-\definecolor{SNHMuted}{HTML}{68736F}
+\definecolor{LoanInk}{HTML}{18201E}
+\definecolor{LoanTeal}{HTML}{0F766E}
+\definecolor{LoanLinkBlue}{HTML}{1A73E8}
+\definecolor{LoanMuted}{HTML}{68736F}
 \definecolor{shadecolor}{HTML}{EEF4F1}
 \setmainfont{Avenir Next}
 \setsansfont{Avenir Next}
 \setmonofont{Menlo}
-\titleformat{\section}{\fontsize{17}{20}\selectfont\bfseries\color{SNHInk}}{}{0pt}{}
-\titleformat{\subsection}{\fontsize{12}{15}\selectfont\bfseries\color{SNHTeal}}{}{0pt}{}
-\titleformat{\paragraph}[block]{\centering\fontsize{11}{14}\selectfont\bfseries\color{SNHInk}}{}{0pt}{}
+\titleformat{\section}{\fontsize{17}{20}\selectfont\bfseries\color{LoanInk}}{}{0pt}{}
+\titleformat{\subsection}{\fontsize{12}{15}\selectfont\bfseries\color{LoanTeal}}{}{0pt}{}
+\titleformat{\paragraph}[block]{\centering\fontsize{11}{14}\selectfont\bfseries\color{LoanInk}}{}{0pt}{}
 \titlespacing*{\section}{0pt}{0pt}{7pt}
 \titlespacing*{\subsection}{0pt}{9pt}{3pt}
 \titlespacing*{\paragraph}{0pt}{9pt}{4pt}
@@ -25,13 +25,13 @@
 \setlength{\parskip}{4pt}
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\footnotesize\color{SNHMuted}AI Loan Adjudication}
-\rhead{\footnotesize\color{SNHMuted}Sabber Ahamed}
-\cfoot{\footnotesize\color{SNHMuted}\thepage}
+\lhead{\footnotesize\color{LoanMuted}AI Loan Adjudication}
+\rhead{\footnotesize\color{LoanMuted}Sabber Ahamed}
+\cfoot{\footnotesize\color{LoanMuted}\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
-\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=SNHLinkBlue,urlcolor=SNHLinkBlue,citecolor=SNHLinkBlue}}
-\let\SNHOriginalHref\href
-\renewcommand{\href}[2]{\SNHOriginalHref{#1}{\textcolor{SNHLinkBlue}{#2}}}
-\newcommand{\moredetails}[1]{\texorpdfstring{\hspace{0.25em}{\fontsize{9}{11}\selectfont\normalfont\color{SNHLinkBlue}[\SNHOriginalHref{#1}{more details}]}}{ [more details]}}
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=LoanLinkBlue,urlcolor=LoanLinkBlue,citecolor=LoanLinkBlue}}
+\let\LoanOriginalHref\href
+\renewcommand{\href}[2]{\LoanOriginalHref{#1}{\textcolor{LoanLinkBlue}{#2}}}
+\newcommand{\moredetails}[1]{\texorpdfstring{\hspace{0.25em}{\fontsize{9}{11}\selectfont\normalfont\color{LoanLinkBlue}[\LoanOriginalHref{#1}{more details}]}}{ [more details]}}
 \AtBeginEnvironment{longtable}{\footnotesize}
 \raggedbottom

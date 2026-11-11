@@ -35,7 +35,7 @@ Deterministic explanation layer
 
 ## Why not rely on one end-to-end LLM?
 
-A single LLM can extract fields, apply rules, select a decision, and write an explanation. I trained and evaluated that end-to-end behavior because it matches the challenge.
+A single LLM can extract fields, apply rules, select a decision, and write an explanation. I trained and evaluated that end-to-end behavior to measure extraction and policy application together.
 
 I did not make the LLM the decision authority. Exact thresholds and comparisons require consistent, reproducible behavior. The rules engine also lets me change policy without retraining the model.
 

@@ -1,36 +1,9 @@
-Technical Coding Challenge: AI Loan Adjudication.
-Role: AI/ML Technology Lead
+Loan Adjudication: Project Scope
 
-Objective: Design, implement, and evaluate a process for loan adjudication application.
+Build and evaluate a system that converts a synthetic personal-loan conversation and supplied policy rules into structured application fields, a decision, failed rule IDs, and an explanation.
 
-Challenge Details:
-----------------------
-1. Dataset:
-○ A sample dataset of credit loan rules is provided in a JSON format. Each entry
-contains a rule that must be satisfied and followed.
-2. Tasks:
-○ Data Preparation:
-■ Write a Python script to:
-■ Load the provided JSON dataset.
-■ Preprocess the dialogues into a suitable format for LLM training. This
-may involve:
-■ Tokenization. (Special token addition, Padding or truncation)
-■ Split the data into training and validation sets.
-■ Discuss your rationale for the chosen preprocessing steps.
-○ Model Selection and Training:
-■ Free to choose any ML-Model for the task.
-■ You can also use a pre-trained LLM from Hugging Face Transformers as a
-base model.
-○ Evaluation and Analysis:
-■ Evaluate your model's performance on the validation set.
-■ Generate sample applications using your model and analyze the model's
-strengths and weaknesses.
-■ The output should be adjudication decision, explaining the user rationale
-behind the decision.
+The project includes reproducible synthetic-data generation, preprocessing with the model's chat template, QLoRA fine-tuning, and generation-mode evaluation. Evaluation covers standard unseen conversations, adversarial dialogue, and changed policy rules.
 
-3. Deliverables:
-○ A GitHub repository containing:
-■ Python scripts for data preparation, model training, and evaluation.
-■ A README file with detailed instructions.
-■ (Optional) A brief report (1-2 pages) summarizing the approach, results,
-and analysis.
+A deterministic rules engine recomputes the final decision from extracted fields. The model's own decision is retained for comparison. Missing or unresolved evidence must remain explicit.
+
+Artifacts include training and evaluation scripts, a model adapter, synthetic datasets, metrics, a technical report, and an interactive walkthrough. This is a synthetic-data research project, not a validated lending system.

@@ -13,7 +13,7 @@ export default function Home() {
         <Link className="brand" href="/" aria-label="Return to introduction">
           <span className="brand-mark">S</span>
           <span className="brand-copy">
-            <strong>SNH AI</strong>
+            <strong>Sabber Ahamed</strong>
             <span>Loan decision lab</span>
           </span>
         </Link>
@@ -27,8 +27,8 @@ export default function Home() {
 
       <section className="welcome">
         <div className="welcome-copy">
-          <p className="recipient">A note for Shams</p>
-          <h1>Hi Shams, thanks for the opportunity to work through this exercise.</h1>
+          <p className="recipient">Qwen3 + LoRA + deterministic rules</p>
+          <h1>From conversation to an auditable loan decision.</h1>
           <p>
             I built this walkthrough to show how a customer conversation becomes a loan decision. Choose a sample application, follow the dialogue, then see how the model and deterministic rules engine produce the final customer response.
           </p>
@@ -46,7 +46,7 @@ export default function Home() {
       </section>
 
       <footer>
-        <span>Technical exercise prepared for SNH AI</span>
+        <span>Loan adjudication research by Sabber Ahamed</span>
         <span>Final decisions come from the rules engine</span>
       </footer>
     </main>
