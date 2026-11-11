@@ -45,11 +45,13 @@ I trained on 4,000 synthetic conversations and selected the adapter using a sepa
 
 I used one NVIDIA RTX 5090 with 32 GiB of VRAM for dataset-generation experiments and fine-tuning. The final two-epoch, 250-step training run took roughly 45 minutes.
 
-| Test set | Model accuracy | Deterministic accuracy | Deterministic citation match |
+| Test set | Model macro F1 | Model citation exact match | Deterministic macro F1 |
 |---|---:|---:|---:|
-| Test-1 | 99.4% | 100.0% | 100.0% |
-| Test-2 | 87.8% | 88.8% | 95.6% |
-| Test-3 | 78.6% | 91.6% | 75.4% |
+| Test-1 | 0.9944 | 95.8% | 1.0000 |
+| Test-2 | 0.8729 | 91.8% | 0.8880 |
+| Test-3 | 0.7506 | 53.0% | 0.9462 |
+
+Macro F1 gives each decision class equal weight. These held-out results do not rule out overfitting: the standard test shares the synthetic generation approach used for training. The base-model evaluation used 100 validation records and the adapter evaluation used 500, so their scores are not a matched estimate of improvement. Full accuracy and per-class metrics remain in the evaluation report.
 
 The clean test shows the value of deterministic recalculation. The harder tests expose the remaining MVP limitation: if the model converts vague or conflicting dialogue into a plausible field value, the rules engine cannot recover the missing evidence. I would add dialogue-evidence grounding before using this design beyond experimentation.
 

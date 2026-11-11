@@ -30,6 +30,8 @@ I kept the test split untouched while selecting the adapter and hyperparameters 
 
 ## Measured baseline
 
+This 100-record baseline and the 500-record adapter validation below are not a matched comparison. For headline reporting, use held-out model macro F1: 0.9944 on Test-1, 0.8729 on Test-2, and 0.7506 on Test-3. Corresponding model citation exact match is 95.8%, 91.8%, and 53.0%. The original measurements below are retained for transparency. Shared synthetic templates limit the evidence for generalization; changing metrics does not rule out overfitting.
+
 I evaluated Qwen3-1.7B without fine-tuning on 100 validation records:
 
 - JSON validity: 100%
